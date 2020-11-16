@@ -1,0 +1,105 @@
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\DFlow.exe.config
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\DFlow.exe
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\DFlow.pdb
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\EntityFramework.dll
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\MetroFramework.Design.dll
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\MetroFramework.dll
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\MetroFramework.Fonts.dll
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\System.Data.SQLite.dll
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\EntityFramework.xml
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\System.Data.SQLite.xml
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\bin\Debug\System.Data.SQLite.dll.config
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\obj\Debug\DFlow.csprojAssemblyReference.cache
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\obj\Debug\DFlow.Main.resources
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\obj\Debug\DFlow.Properties.Resources.resources
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\obj\Debug\DFlow.csproj.GenerateResource.cache
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\obj\Debug\DFlow.csproj.CoreCompileInputs.cache
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\obj\Debug\DFlow.csproj.CopyComplete
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\obj\Debug\DFlow.exe
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\obj\Debug\DFlow.pdb
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\obj\Debug\DFlow.anime_record.resources
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\obj\Debug\DFlow.input_box.resources
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\obj\Debug\DFlow.language_choice.resources
+C:\Users\Oddelger Dash-Ulziit\source\repos\DFlow\DFlow\obj\Debug\DFlow.server_config.resources
+F:\Projects\DFlow\DFlow\bin\Debug\DFlow.exe.config
+F:\Projects\DFlow\DFlow\bin\Debug\DFlow.exe
+F:\Projects\DFlow\DFlow\bin\Debug\DFlow.pdb
+F:\Projects\DFlow\DFlow\bin\Debug\EntityFramework.dll
+F:\Projects\DFlow\DFlow\bin\Debug\EntityFramework.SqlServer.dll
+F:\Projects\DFlow\DFlow\bin\Debug\MetroFramework.Design.dll
+F:\Projects\DFlow\DFlow\bin\Debug\MetroFramework.dll
+F:\Projects\DFlow\DFlow\bin\Debug\MetroFramework.Fonts.dll
+F:\Projects\DFlow\DFlow\bin\Debug\policy.2.0.taglib-sharp.dll
+F:\Projects\DFlow\DFlow\bin\Debug\System.Data.SQLite.dll
+F:\Projects\DFlow\DFlow\bin\Debug\System.Data.SQLite.EF6.dll
+F:\Projects\DFlow\DFlow\bin\Debug\System.Data.SQLite.Linq.dll
+F:\Projects\DFlow\DFlow\bin\Debug\taglib-sharp.dll
+F:\Projects\DFlow\DFlow\bin\Debug\EntityFramework.xml
+F:\Projects\DFlow\DFlow\bin\Debug\EntityFramework.SqlServer.xml
+F:\Projects\DFlow\DFlow\bin\Debug\System.Data.SQLite.xml
+F:\Projects\DFlow\DFlow\bin\Debug\System.Data.SQLite.dll.config
+F:\Projects\DFlow\DFlow\bin\Debug\policy.2.0.taglib-sharp.config
+F:\Projects\DFlow\DFlow\obj\Debug\DFlow.csprojAssemblyReference.cache
+F:\Projects\DFlow\DFlow\obj\Debug\DFlow.anime_record.resources
+F:\Projects\DFlow\DFlow\obj\Debug\DFlow.input_box.resources
+F:\Projects\DFlow\DFlow\obj\Debug\DFlow.language_choice.resources
+F:\Projects\DFlow\DFlow\obj\Debug\DFlow.Main.resources
+F:\Projects\DFlow\DFlow\obj\Debug\DFlow.Properties.Resources.resources
+F:\Projects\DFlow\DFlow\obj\Debug\DFlow.server_config.resources
+F:\Projects\DFlow\DFlow\obj\Debug\DFlow.csproj.GenerateResource.cache
+F:\Projects\DFlow\DFlow\obj\Debug\DFlow.csproj.CoreCompileInputs.cache
+F:\Projects\DFlow\DFlow\obj\Debug\DFlow.csproj.CopyComplete
+F:\Projects\DFlow\DFlow\obj\Debug\DFlow.exe
+F:\Projects\DFlow\DFlow\obj\Debug\DFlow.pdb
+F:\Projects\DFlow\DFlow\obj\Debug\DFlow.season_episodes.resources
+F:\Projects\DFlow\DFlow\bin\Debug\Spire.Common.dll
+F:\Projects\DFlow\DFlow\bin\Debug\Spire.License.dll
+F:\Projects\DFlow\DFlow\bin\Debug\Spire.Pdf.dll
+F:\Projects\DFlow\DFlow\bin\Debug\Spire.XLS.dll
+F:\Projects\DFlow\DFlow\bin\Debug\Microsoft.mshtml.dll
+F:\Projects\DFlow\DFlow\bin\Debug\Spire.Common.xml
+F:\Projects\DFlow\DFlow\bin\Debug\Spire.License.xml
+F:\Projects\DFlow\DFlow\bin\Debug\Spire.Pdf.xml
+F:\Projects\DFlow\DFlow\bin\Debug\Spire.XLS.xml
+D:\Projects\DFlow\DFlow\bin\Debug\DFlow.exe.config
+D:\Projects\DFlow\DFlow\bin\Debug\DFlow.exe
+D:\Projects\DFlow\DFlow\bin\Debug\DFlow.pdb
+D:\Projects\DFlow\DFlow\bin\Debug\EntityFramework.dll
+D:\Projects\DFlow\DFlow\bin\Debug\EntityFramework.SqlServer.dll
+D:\Projects\DFlow\DFlow\bin\Debug\MetroFramework.Design.dll
+D:\Projects\DFlow\DFlow\bin\Debug\MetroFramework.dll
+D:\Projects\DFlow\DFlow\bin\Debug\MetroFramework.Fonts.dll
+D:\Projects\DFlow\DFlow\bin\Debug\Spire.License.dll
+D:\Projects\DFlow\DFlow\bin\Debug\Spire.Pdf.dll
+D:\Projects\DFlow\DFlow\bin\Debug\Spire.XLS.dll
+D:\Projects\DFlow\DFlow\bin\Debug\System.Data.SQLite.dll
+D:\Projects\DFlow\DFlow\bin\Debug\System.Data.SQLite.EF6.dll
+D:\Projects\DFlow\DFlow\bin\Debug\System.Data.SQLite.Linq.dll
+D:\Projects\DFlow\DFlow\bin\Debug\Microsoft.mshtml.dll
+D:\Projects\DFlow\DFlow\bin\Debug\EntityFramework.xml
+D:\Projects\DFlow\DFlow\bin\Debug\EntityFramework.SqlServer.xml
+D:\Projects\DFlow\DFlow\bin\Debug\Spire.License.xml
+D:\Projects\DFlow\DFlow\bin\Debug\Spire.Pdf.xml
+D:\Projects\DFlow\DFlow\bin\Debug\Spire.XLS.xml
+D:\Projects\DFlow\DFlow\bin\Debug\System.Data.SQLite.xml
+D:\Projects\DFlow\DFlow\bin\Debug\System.Data.SQLite.dll.config
+D:\Projects\DFlow\DFlow\obj\Debug\DFlow.csprojAssemblyReference.cache
+D:\Projects\DFlow\DFlow\obj\Debug\DFlow.anime_record.resources
+D:\Projects\DFlow\DFlow\obj\Debug\DFlow.input_box.resources
+D:\Projects\DFlow\DFlow\obj\Debug\DFlow.language_choice.resources
+D:\Projects\DFlow\DFlow\obj\Debug\DFlow.Main.resources
+D:\Projects\DFlow\DFlow\obj\Debug\DFlow.Properties.Resources.resources
+D:\Projects\DFlow\DFlow\obj\Debug\DFlow.season_episodes.resources
+D:\Projects\DFlow\DFlow\obj\Debug\DFlow.csproj.GenerateResource.cache
+D:\Projects\DFlow\DFlow\obj\Debug\DFlow.csproj.CopyComplete
+D:\Projects\DFlow\DFlow\obj\Debug\DFlow.exe
+D:\Projects\DFlow\DFlow\obj\Debug\DFlow.pdb
+D:\Projects\DFlow\DFlow\bin\Debug\policy.2.0.taglib-sharp.dll
+D:\Projects\DFlow\DFlow\bin\Debug\taglib-sharp.dll
+D:\Projects\DFlow\DFlow\bin\Debug\policy.2.0.taglib-sharp.config
+D:\Projects\DFlow\DFlow\obj\Debug\DFlow.movie_record.resources
+D:\Projects\DFlow\DFlow\obj\Debug\DFlow.csproj.CoreCompileInputs.cache

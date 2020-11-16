@@ -1,0 +1,86 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DFlow.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Subtitle_Extensions" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;.cdg&lt;/string&gt;
+  &lt;string&gt;.idx&lt;/string&gt;
+  &lt;string&gt;.srt&lt;/string&gt;
+  &lt;string&gt;.sub&lt;/string&gt;
+  &lt;string&gt;.utf&lt;/string&gt;
+  &lt;string&gt;.ass&lt;/string&gt;
+  &lt;string&gt;.ssa&lt;/string&gt;
+  &lt;string&gt;.aqt&lt;/string&gt;
+  &lt;string&gt;.jss&lt;/string&gt;
+  &lt;string&gt;.psb&lt;/string&gt;
+  &lt;string&gt;.rt&lt;/string&gt;
+  &lt;string&gt;.sami&lt;/string&gt;
+  &lt;string&gt;.smi&lt;/string&gt;
+  &lt;string&gt;.txt&lt;/string&gt;
+  &lt;string&gt;.smil&lt;/string&gt;
+  &lt;string&gt;.stl&lt;/string&gt;
+  &lt;string&gt;.usf&lt;/string&gt;
+  &lt;string&gt;.dks&lt;/string&gt;
+  &lt;string&gt;.pjs&lt;/string&gt;
+  &lt;string&gt;.mpl2&lt;/string&gt;
+  &lt;string&gt;.mks&lt;/string&gt;
+  &lt;string&gt;.vtt&lt;/string&gt;
+  &lt;string&gt;.tt&lt;/string&gt;
+  &lt;string&gt;.ttml&lt;/string&gt;
+  &lt;string&gt;.dfxp&lt;/string&gt;
+  &lt;string&gt;.scc&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="Video_Extensions" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;.mp4&lt;/string&gt;
+  &lt;string&gt;.264&lt;/string&gt;
+  &lt;string&gt;.avc&lt;/string&gt;
+  &lt;string&gt;.h264&lt;/string&gt;
+  &lt;string&gt;.x264&lt;/string&gt;
+  &lt;string&gt;.avi&lt;/string&gt;
+  &lt;string&gt;.flv&lt;/string&gt;
+  &lt;string&gt;.mp4&lt;/string&gt;
+  &lt;string&gt;.m4v&lt;/string&gt;
+  &lt;string&gt;.mpg&lt;/string&gt;
+  &lt;string&gt;.mpeg&lt;/string&gt;
+  &lt;string&gt;.m2v&lt;/string&gt;
+  &lt;string&gt;.mpv&lt;/string&gt;
+  &lt;string&gt;.evo&lt;/string&gt;
+  &lt;string&gt;.evob&lt;/string&gt;
+  &lt;string&gt;.vob&lt;/string&gt;
+  &lt;string&gt;.ts&lt;/string&gt;
+  &lt;string&gt;.m2ts&lt;/string&gt;
+  &lt;string&gt;.mts&lt;/string&gt;
+  &lt;string&gt;.m1v&lt;/string&gt;
+  &lt;string&gt;.m2v&lt;/string&gt;
+  &lt;string&gt;.mka&lt;/string&gt;
+  &lt;string&gt;.mks&lt;/string&gt;
+  &lt;string&gt;.mkv&lt;/string&gt;
+  &lt;string&gt;.mk3d&lt;/string&gt;
+  &lt;string&gt;.webm&lt;/string&gt;
+  &lt;string&gt;.webmv&lt;/string&gt;
+  &lt;string&gt;.webma&lt;/string&gt;
+  &lt;string&gt;.ogv&lt;/string&gt;
+  &lt;string&gt;.mov&lt;/string&gt;
+  &lt;string&gt;.rmvb&lt;/string&gt;
+  &lt;string&gt;.rv&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="merge_destination" Type="System.String" Scope="User">
+      <Value Profile="(Default)">D:\MKV Convertions</Value>
+    </Setting>
+    <Setting Name="red" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">219, 0, 36</Value>
+    </Setting>
+    <Setting Name="green" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">0, 219, 109</Value>
+    </Setting>
+    <Setting Name="blue" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">0, 174, 219</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
