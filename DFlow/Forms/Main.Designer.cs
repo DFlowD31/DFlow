@@ -54,6 +54,8 @@
             this.loadingImage = new System.Windows.Forms.PictureBox();
             this.Open_File_Dialog = new System.Windows.Forms.OpenFileDialog();
             this.Movie_File = new System.Windows.Forms.Button();
+            this.icoFromImage = new System.ComponentModel.BackgroundWorker();
+            this.icoFromImageQueuer = new System.ComponentModel.BackgroundWorker();
             this.Log_Panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loadingImage)).BeginInit();
             this.SuspendLayout();
@@ -349,6 +351,16 @@
             this.Movie_File.UseVisualStyleBackColor = false;
             this.Movie_File.Click += new System.EventHandler(this.Movie_File_Click);
             // 
+            // icoFromImage
+            // 
+            this.icoFromImage.DoWork += new System.ComponentModel.DoWorkEventHandler(this.icoFromImage_DoWork);
+            // 
+            // icoFromImageQueuer
+            // 
+            this.icoFromImageQueuer.WorkerReportsProgress = true;
+            this.icoFromImageQueuer.DoWork += new System.ComponentModel.DoWorkEventHandler(this.icoFromImageQueuer_DoWork);
+            this.icoFromImageQueuer.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.icoFromImageQueuer_ProgressChanged);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -412,6 +424,8 @@
         private System.Windows.Forms.PictureBox loadingImage;
         private System.Windows.Forms.OpenFileDialog Open_File_Dialog;
         private System.Windows.Forms.Button Movie_File;
+        private System.ComponentModel.BackgroundWorker icoFromImage;
+        private System.ComponentModel.BackgroundWorker icoFromImageQueuer;
     }
 }
 

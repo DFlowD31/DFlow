@@ -257,7 +257,7 @@ namespace DFlow
                                             else
                                                 this_object.GetType().GetProperty(column.ColumnName).SetValue(this_object, row[column]);
                                         }
-                                        catch (Exception ex) { /*Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + " with: " + column.ColumnName, "Error");*/ }
+                                        catch (Exception) { /*Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + " with: " + column.ColumnName, "Error");*/ }
                                     }
                                     the_array.Add(this_object);
                                 }
