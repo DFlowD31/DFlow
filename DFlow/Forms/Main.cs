@@ -21,8 +21,13 @@ using RestSharp;
 using Newtonsoft.Json;
 using DFlow.Classes;
 using System.Net;
+using FanartTv;
 using System.Windows.Media.Imaging;
 using System.Text.RegularExpressions;
+using TraktNet;
+using TraktNet.Responses;
+using TraktNet.Objects.Get.Shows;
+using TraktNet.Requests.Parameters;
 
 namespace DFlow
 {
@@ -536,19 +541,58 @@ namespace DFlow
         {
             //new movie_record().Show();
 
+            //var client = new TraktClient("6129e911f65e311e9b6b47826701c92c89efe788e9ba14696698fbd2feb8b45a", "1f981cf20baf5c306be6f75a102edc84757d5df3e1a5347e52121352ed4573bd");
+
+            //TraktResponse<ITraktShow> sherlock = await client.Shows.GetShowAsync("sherlock", new TraktExtendedInfo().SetFull()).ConfigureAwait(false);
+
+            //ITraktShow show = null;
+
+            //if (sherlock)
+            //{
+            //    show = sherlock.Value;
+            //}
+
+            //// Set your Apikey
+            //FanartTv.API.Key = "e0151f36c7575f70eb43869fdc85e46c";
+
+            //FanartTv.TV.Show show2 = new FanartTv.TV.Show(show.Ids.Tvdb.ToString());
+
+            //MessageBox.Show(show2.List.Seasonposter[0].Season);
+
             if (Folder_Browser_Dialog.ShowDialog() == DialogResult.OK)
             {
-                if (MessageBox.Show("Multiple movie container?", "Directory type", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    String[] directories = Directory.GetDirectories(Folder_Browser_Dialog.SelectedPath);
-                    ProgressBar.Step = 1;
-                    ProgressBar.Maximum = directories.Count();
-                    icoFromImageQueuer.RunWorkerAsync(directories);
+                List<string> strings = Regex.Split(Folder_Browser_Dialog.SelectedPath.Substring(Folder_Browser_Dialog.SelectedPath.LastIndexOf(@"\")), @"\W|_").ToList();
+
+                string all_s = string.Empty;
+                string quality = string.Empty;
+
+                for (int i = strings.Count() - 1; i > 0; i--) {
+                    List<quality> Q = (List<quality>)database.getObjectFromDatabase<quality>();
+                    foreach (quality q in Q) {
+                        if (q.alternate_name.Split(',').ToList().Find(x => x.ToLower() == strings[i].ToLower()) is string y && y != null)
+                        {
+                            strings.RemoveAt(i);
+                            quality = q.name;
+                        }
+                    }
                 }
-                else
-                {
-                    icoFromImage.RunWorkerAsync(new List<string> { Folder_Browser_Dialog.SelectedPath, "movie" });
-                }
+
+                MessageBox.Show(quality);
+
+                //if (MessageBox.Show("Multiple movie container?", "Directory type", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                //{
+                //    String[] directories = Directory.GetDirectories(Folder_Browser_Dialog.SelectedPath);
+                //    ProgressBar.Step = 1;
+                //    ProgressBar.Maximum = directories.Count();
+                //    icoFromImageQueuer.RunWorkerAsync(directories);
+                //}
+                //else
+                //{
+                //    if (MessageBox.Show("Is this a series folder?", "Type", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                //        icoFromImage.RunWorkerAsync(new List<string> { Folder_Browser_Dialog.SelectedPath, "tv" });
+                //    else
+                //        icoFromImage.RunWorkerAsync(new List<string> { Folder_Browser_Dialog.SelectedPath, "movie" });
+                //}
             }
         }
 
@@ -1210,6 +1254,20 @@ namespace DFlow
             }
         }
 
+        private async Task<FanartTv.TV.Show> gettvID(string name) {
+
+            var client = new TraktClient("6129e911f65e311e9b6b47826701c92c89efe788e9ba14696698fbd2feb8b45a", "1f981cf20baf5c306be6f75a102edc84757d5df3e1a5347e52121352ed4573bd");
+
+            TraktResponse<ITraktShow> show = await client.Shows.GetShowAsync(name, new TraktExtendedInfo().SetFull());
+
+            // Set your Apikey
+            API.Key = "e0151f36c7575f70eb43869fdc85e46c";
+
+            FanartTv.TV.Show show2 = new FanartTv.TV.Show(show.Value.Ids.Tvdb.ToString());
+
+            return show2;
+        }
+
         private void icoFromImage_DoWork(object sender, DoWorkEventArgs e)
         {
             List<string> arguments = (List<string>)e.Argument;
@@ -1234,8 +1292,21 @@ namespace DFlow
                 List<int> years = new List<int>();
 
                 string folderName = name;
+                int s_number = 0;
 
                 name = name.Replace(".", " ");
+
+                if (type == "tv") {
+                    string s_full = Regex.Match(name, @"Season \d+").ToString();
+                    string s_short = Regex.Match(name, @"S\d{2}E\d{2}").ToString();
+                    string s_simple = Regex.Match(name, @"S\d{2}").ToString();
+                    if (s_simple != null)
+                        s_number = Convert.ToInt32(Regex.Match(s_simple, @"\d{2}").Groups[0].Value);
+                    else if (s_short != null)
+                        s_number = Convert.ToInt32(Regex.Match(s_short, @"\d{2}").Groups[0].Value);
+                    else if (s_full != null)
+                        s_number = Convert.ToInt32(Regex.Match(s_full, @"\d2").Groups[0].Value);
+                }
 
                 removeFromName<quality>(ref name);
                 //removeFromName<audio_channel>(ref name);
@@ -1279,11 +1350,12 @@ namespace DFlow
                 {
                     foreach (int year in years) {
 
-                        Log("Searching for := " + folderName + " as:= " + name + " Year:= (" + year + ")", "Warning");
+                        //Log("Searching for := " + folderName + " as:= " + name + " Year:= (" + year + ")", "Warning");
                         IRestResponse response = null;
                         if (type == "tv")
                         {
                             response = new RestClient("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&language=en-US&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&first_air_date_year=" + year.ToString()).Execute(new RestRequest(Method.GET));
+                            Log("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&language=en-US&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&first_air_date_year=" + year.ToString(), "Msg");
                         }
                         else {
                             response = new RestClient("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&language=en-US&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&year=" + year.ToString()).Execute(new RestRequest(Method.GET));
@@ -1302,12 +1374,11 @@ namespace DFlow
                         {
                             responseContent = JsonConvert.DeserializeObject<TMDB_tv>(response.Content);
                         }
-
-                        if (responseContent.Results != null && responseContent.Results.Count > 0)
+                        if (responseContent.TotalResults > 0)
                         {
                             string closest_index = string.Empty;
 
-                            if (responseContent.Results.Count == 1)
+                            if (responseContent.TotalResults == 1)
                             {
                                 closest_index = "0";
                             }
@@ -1353,16 +1424,25 @@ namespace DFlow
                             {
                                 if (closest_index != string.Empty)
                                 {
-                                    mainBitmap = new Bitmap(WebRequest.Create("https://image.tmdb.org/t/p/w500" + responseContent.Results[Convert.ToInt32(closest_index)].PosterPath).GetResponse().GetResponseStream());
-                                    Log("Poster Found.", "Success");
-                                    goto posterFound;
+                                    if (type == "tv")
+                                    {
+                                        FanartTv.TV.Show show = gettvID(name).Result;
+
+                                        MessageBox.Show(show.List.Name);
+                                    }
+                                    else
+                                    {
+                                        mainBitmap = new Bitmap(WebRequest.Create("https://image.tmdb.org/t/p/w500" + responseContent.Results[Convert.ToInt32(closest_index)].PosterPath).GetResponse().GetResponseStream());
+                                        Log("Poster Found.", "Success");
+                                        goto posterFound;
+                                    }
                                 }
                             }
                             catch (Exception) { }
                         }
                         else
                         {
-                            //MessageBox.Show("No results");
+                            Log("   No results", "Msg");
                         }
 
                         name = name.Substring(0, name.Length - 1);

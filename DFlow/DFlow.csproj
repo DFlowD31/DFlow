@@ -45,6 +45,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="FanartTv, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FanartTv.2.0.5\lib\FanartTv.dll</HintPath>
+    </Reference>
     <Reference Include="MetroFramework, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
       <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.dll</HintPath>
     </Reference>
@@ -102,6 +105,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="taglib-sharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
       <HintPath>..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Trakt.NET, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Trakt.NET.1.1.0\lib\netstandard1.1\Trakt.NET.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>

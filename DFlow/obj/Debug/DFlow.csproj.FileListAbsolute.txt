@@ -108,3 +108,7 @@ D:\Projects\DFlow\DFlow\bin\Debug\NEbml.Core.xml
 D:\Projects\DFlow\DFlow\bin\Debug\RestSharp.xml
 D:\Projects\DFlow\DFlow\bin\Debug\Newtonsoft.Json.dll
 D:\Projects\DFlow\DFlow\bin\Debug\Newtonsoft.Json.xml
+D:\Projects\DFlow\DFlow\bin\Debug\Trakt.NET.dll
+D:\Projects\DFlow\DFlow\bin\Debug\Trakt.NET.pdb
+D:\Projects\DFlow\DFlow\bin\Debug\Trakt.NET.xml
+D:\Projects\DFlow\DFlow\bin\Debug\FanartTv.dll
