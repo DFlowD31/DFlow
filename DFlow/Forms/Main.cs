@@ -213,20 +213,19 @@ namespace DFlow
             Show();
         }
 
-        public void Rename_Sub(string filepath, string filenew, string fileext, DirectoryInfo d)
+        public void Rename_Sub(DirectoryInfo d)
         {
             try
             {
-                //MessageBox.Show(d.GetFiles("*.*", SearchOption.AllDirectories).Count().ToString());
                 foreach (FileInfo FileName in d.GetFiles("*.*", SearchOption.AllDirectories))
                 {
                     if (!FileName.Name.Contains(".srt"))
                         movie_names.Add(FileName.Name.Substring(0, FileName.Name.LastIndexOf(".")));
-                    filepath = FileName.FullName.Substring(0, FileName.FullName.LastIndexOf(@"\"));
-                    fileext = FileName.FullName.Substring(FileName.FullName.LastIndexOf("."));
+                    string filepath = FileName.FullName.Substring(0, FileName.FullName.LastIndexOf(@"\"));
+                    string fileext = FileName.FullName.Substring(FileName.FullName.LastIndexOf("."));
                     if (!is_series)
                     {
-                        filenew = filepath.Substring(filepath.LastIndexOf(@"\") + 1);
+                        string filenew = filepath.Substring(filepath.LastIndexOf(@"\") + 1);
                         try
                         {
                             File.Move(FileName.FullName, filenew + fileext);
@@ -296,7 +295,7 @@ namespace DFlow
                     }
                     foreach (FileInfo SubFiles in d.GetFiles("*.srt", SearchOption.AllDirectories))
                     {
-                        filepath = SubFiles.FullName.Substring(0, SubFiles.FullName.LastIndexOf(@"\"));
+                        string filepath = SubFiles.FullName.Substring(0, SubFiles.FullName.LastIndexOf(@"\"));
                         try
                         {
                             File.Move(SubFiles.FullName, movie_names[sub_index] + ".srt");
@@ -561,38 +560,38 @@ namespace DFlow
 
             if (Folder_Browser_Dialog.ShowDialog() == DialogResult.OK)
             {
-                List<string> strings = Regex.Split(Folder_Browser_Dialog.SelectedPath.Substring(Folder_Browser_Dialog.SelectedPath.LastIndexOf(@"\")), @"\W|_").ToList();
+                //List<string> strings = Regex.Split(Folder_Browser_Dialog.SelectedPath.Substring(Folder_Browser_Dialog.SelectedPath.LastIndexOf(@"\")), @"\W|_").ToList();
 
-                string all_s = string.Empty;
-                string quality = string.Empty;
+                //string all_s = string.Empty;
+                //string quality = string.Empty;
 
-                for (int i = strings.Count() - 1; i > 0; i--) {
-                    List<quality> Q = (List<quality>)database.getObjectFromDatabase<quality>();
-                    foreach (quality q in Q) {
-                        if (q.alternate_name.Split(',').ToList().Find(x => x.ToLower() == strings[i].ToLower()) is string y && y != null)
-                        {
-                            strings.RemoveAt(i);
-                            quality = q.name;
-                        }
-                    }
+                //for (int i = strings.Count() - 1; i > 0; i--) {
+                //    List<quality> Q = (List<quality>)database.getObjectFromDatabase<quality>();
+                //    foreach (quality q in Q) {
+                //        if (q.alternate_name.Split(',').ToList().Find(x => x.ToLower() == strings[i].ToLower()) is string y && y != null)
+                //        {
+                //            strings.RemoveAt(i);
+                //            quality = q.name;
+                //        }
+                //    }
+                //}
+
+                //MessageBox.Show(quality);
+
+                if (MessageBox.Show("Multiple movie container?", "Directory type", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    String[] directories = Directory.GetDirectories(Folder_Browser_Dialog.SelectedPath);
+                    ProgressBar.Step = 1;
+                    ProgressBar.Maximum = directories.Count();
+                    icoFromImageQueuer.RunWorkerAsync(directories);
                 }
-
-                MessageBox.Show(quality);
-
-                //if (MessageBox.Show("Multiple movie container?", "Directory type", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                //{
-                //    String[] directories = Directory.GetDirectories(Folder_Browser_Dialog.SelectedPath);
-                //    ProgressBar.Step = 1;
-                //    ProgressBar.Maximum = directories.Count();
-                //    icoFromImageQueuer.RunWorkerAsync(directories);
-                //}
-                //else
-                //{
-                //    if (MessageBox.Show("Is this a series folder?", "Type", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                //        icoFromImage.RunWorkerAsync(new List<string> { Folder_Browser_Dialog.SelectedPath, "tv" });
-                //    else
-                //        icoFromImage.RunWorkerAsync(new List<string> { Folder_Browser_Dialog.SelectedPath, "movie" });
-                //}
+                else
+                {
+                    if (MessageBox.Show("Is this a series folder?", "Type", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        icoFromImage.RunWorkerAsync(new List<string> { Folder_Browser_Dialog.SelectedPath, "tv" });
+                    else
+                        icoFromImage.RunWorkerAsync(new List<string> { Folder_Browser_Dialog.SelectedPath, "movie" });
+                }
             }
         }
 
@@ -1255,17 +1254,12 @@ namespace DFlow
         }
 
         private async Task<FanartTv.TV.Show> gettvID(string name) {
-
-            var client = new TraktClient("6129e911f65e311e9b6b47826701c92c89efe788e9ba14696698fbd2feb8b45a", "1f981cf20baf5c306be6f75a102edc84757d5df3e1a5347e52121352ed4573bd");
-
-            TraktResponse<ITraktShow> show = await client.Shows.GetShowAsync(name, new TraktExtendedInfo().SetFull());
-
             // Set your Apikey
             API.Key = "e0151f36c7575f70eb43869fdc85e46c";
 
-            FanartTv.TV.Show show2 = new FanartTv.TV.Show(show.Value.Ids.Tvdb.ToString());
+            await new TraktClient("6129e911f65e311e9b6b47826701c92c89efe788e9ba14696698fbd2feb8b45a", "1f981cf20baf5c306be6f75a102edc84757d5df3e1a5347e52121352ed4573bd").Shows.GetShowAliasesAsync(name);
 
-            return show2;
+            return new FanartTv.TV.Show((await new TraktClient("6129e911f65e311e9b6b47826701c92c89efe788e9ba14696698fbd2feb8b45a", "1f981cf20baf5c306be6f75a102edc84757d5df3e1a5347e52121352ed4573bd").Shows.GetShowAsync(name, new TraktExtendedInfo().SetFull())).Value.Ids.Imdb.ToString());
         }
 
         private void icoFromImage_DoWork(object sender, DoWorkEventArgs e)
@@ -1274,235 +1268,250 @@ namespace DFlow
             string directory = arguments[0];
             string type = arguments[1];
 
-            var ImageFiles = GetFilesFrom(directory, new String[] { "jpg", "jpeg", "png", "gif", "tiff", "bmp", "svg" }, false);
-            string iniPath = directory + @"\desktop.ini";
-            string icoPath = directory + @"\folder.ico";
-            if (File.Exists(icoPath)) File.Delete(icoPath);
-            if (File.Exists(iniPath)) File.Delete(iniPath);
+            if (directory.Substring(directory.LastIndexOf(@"\") + 1).ToLower() != "tv") {
+                var ImageFiles = GetFilesFrom(directory, new String[] { "jpg", "jpeg", "png", "gif", "tiff", "bmp", "svg" }, false);
+                string iniPath = directory + @"\desktop.ini";
+                string icoPath = directory + @"\folder.ico";
+                if (File.Exists(icoPath)) File.Delete(icoPath);
+                if (File.Exists(iniPath)) File.Delete(iniPath);
 
-            Bitmap mainBitmap = null;
+                Bitmap mainBitmap = null;
 
-            if (ImageFiles.Length > 0)
-            {
-                mainBitmap = new Bitmap(ImageFiles[0]);
-            }
-            else
-            {
-                string name = directory.Substring(directory.LastIndexOf(@"\") + 1);
-                List<int> years = new List<int>();
-
-                string folderName = name;
-                int s_number = 0;
-
-                name = name.Replace(".", " ");
-
-                if (type == "tv") {
-                    string s_full = Regex.Match(name, @"Season \d+").ToString();
-                    string s_short = Regex.Match(name, @"S\d{2}E\d{2}").ToString();
-                    string s_simple = Regex.Match(name, @"S\d{2}").ToString();
-                    if (s_simple != null)
-                        s_number = Convert.ToInt32(Regex.Match(s_simple, @"\d{2}").Groups[0].Value);
-                    else if (s_short != null)
-                        s_number = Convert.ToInt32(Regex.Match(s_short, @"\d{2}").Groups[0].Value);
-                    else if (s_full != null)
-                        s_number = Convert.ToInt32(Regex.Match(s_full, @"\d2").Groups[0].Value);
-                }
-
-                removeFromName<quality>(ref name);
-                //removeFromName<audio_channel>(ref name);
-                removeFromName<audio_codec>(ref name);
-                removeFromName<encoder>(ref name);
-                removeFromName<source>(ref name);
-                removeFromName<video_codec>(ref name);
-                removeFromName<language>(ref name);
-
-                Regex regex = new Regex(@"\d{4}");
-
-                foreach (Match match in regex.Matches(name))
+                if (ImageFiles.Length > 0)
                 {
-                    years.Add(Convert.ToInt32(match.Value));
+                    mainBitmap = new Bitmap(ImageFiles[0]);
                 }
-
-                years.Sort((a, b) => b.CompareTo(a));
-
-                try { name = Regex.Replace(name, $@"\b{years[0]}\b", string.Empty); } catch (Exception) { }
-
-                if (years.Count() == 0)
-                    years.Add(0);
-
-                name = Regex.Replace(name, @"[^0-9a-zA-Z\s]", string.Empty);
-                name = new Regex("[ ]{2,}", RegexOptions.None).Replace(name, " ");
-                name = name.ToLower();
-
-                if (name.Contains("collection"))
+                else
                 {
-                    type = "collection";
-                    name = name.Replace("collection", string.Empty);
+                    string name = directory.Substring(directory.LastIndexOf(@"\") + 1);
+                    List<int> years = new List<int>();
+
+                    string folderName = name;
+                    int s_number = 0;
+
+                    name = name.Replace(".", " ");
+
+                    if (type == "tv")
+                    {
+                        try
+                        {
+                            string s_full = Regex.Match(name, @"Season \d+").ToString();
+                            string s_short = Regex.Match(name, @"S\d{2}E\d{2}").ToString();
+                            string s_simple = Regex.Match(name, @"S\d{2}").ToString();
+                            if (s_simple != null) { s_number = Convert.ToInt32(Regex.Match(s_simple, @"\d{2}").Groups[0].Value); }
+
+                            else if (s_short != null)
+                                s_number = Convert.ToInt32(Regex.Match(s_short, @"\d{2}").Groups[0].Value);
+                            else if (s_full != null)
+                                s_number = Convert.ToInt32(Regex.Match(s_full, @"\d2").Groups[0].Value);
+                        }
+                        catch (Exception) { }
+                    }
+
+                    removeFromName<quality>(ref name);
+                    //removeFromName<audio_channel>(ref name);
+                    removeFromName<audio_codec>(ref name);
+                    removeFromName<encoder>(ref name);
+                    removeFromName<source>(ref name);
+                    removeFromName<video_codec>(ref name);
+                    removeFromName<language>(ref name);
+
+                    Regex regex = new Regex(@"\d{4}");
+
+                    foreach (Match match in regex.Matches(name))
+                    {
+                        years.Add(Convert.ToInt32(match.Value));
+                    }
+
+                    years.Sort((a, b) => b.CompareTo(a));
+
+                    try { name = Regex.Replace(name, $@"\b{years[0]}\b", string.Empty); } catch (Exception) { }
+
+                    if (years.Count() == 0)
+                        years.Add(0);
+
+                    name = Regex.Replace(name, @"[^0-9a-zA-Z\s&]", string.Empty);
                     name = new Regex("[ ]{2,}", RegexOptions.None).Replace(name, " ");
-                }
+                    name = name.ToLower();
 
-                Log("Simplified name:= " + name, "Msg");
+                    if (name.Contains("collection"))
+                    {
+                        type = "collection";
+                        name = name.Replace("collection", string.Empty);
+                        name = new Regex("[ ]{2,}", RegexOptions.None).Replace(name, " ");
+                    }
 
-                MethodInvoker m = new MethodInvoker(() => { Mini_ProgressBar.Maximum = name.Length; Mini_ProgressBar.Value = 0; });
-                Mini_ProgressBar.Invoke(m);
+                    Log("Simplified name:= " + name, "Msg");
 
-                while (name.Length > 0)
-                {
-                    foreach (int year in years) {
+                    MethodInvoker m = new MethodInvoker(() => { Mini_ProgressBar.Maximum = name.Length; Mini_ProgressBar.Value = 0; });
+                    Mini_ProgressBar.Invoke(m);
 
-                        //Log("Searching for := " + folderName + " as:= " + name + " Year:= (" + year + ")", "Warning");
-                        IRestResponse response = null;
-                        if (type == "tv")
+                    while (name.Length > 0)
+                    {
+                        foreach (int year in years)
                         {
-                            response = new RestClient("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&language=en-US&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&first_air_date_year=" + year.ToString()).Execute(new RestRequest(Method.GET));
-                            Log("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&language=en-US&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&first_air_date_year=" + year.ToString(), "Msg");
-                        }
-                        else {
-                            response = new RestClient("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&language=en-US&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&year=" + year.ToString()).Execute(new RestRequest(Method.GET));
-                        }
-                        dynamic responseContent = null;
 
-                        if (type == "collection")
-                        {
-                            responseContent = JsonConvert.DeserializeObject<TMDB_collection>(response.Content);
-                        }
-                        else if (type == "movie")
-                        {
-                            responseContent = JsonConvert.DeserializeObject<TMDB_movie>(response.Content);
-                        }
-                        else if (type == "tv")
-                        {
-                            responseContent = JsonConvert.DeserializeObject<TMDB_tv>(response.Content);
-                        }
-                        if (responseContent.TotalResults > 0)
-                        {
-                            string closest_index = string.Empty;
-
-                            if (responseContent.TotalResults == 1)
+                            //Log("Searching for := " + folderName + " as:= " + name + " Year:= (" + year + ")", "Warning");
+                            IRestResponse response = null;
+                            if (type == "tv")
                             {
-                                closest_index = "0";
+                                response = new RestClient("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&language=en-US&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&first_air_date_year=" + year.ToString()).Execute(new RestRequest(Method.GET));
+                                //Log("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&language=en-US&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&first_air_date_year=" + year.ToString(), "Msg");
                             }
                             else
                             {
-                                
-                                double? most_match = 0.0;
-                                foreach (dynamic result in responseContent.Results)
-                                {
-                                    var title = string.Empty;
-                                    var year2 = string.Empty;
-                                    if (type == "collection")
-                                    {
-                                        title = result.Name;
-                                    }
-                                    else if (type == "movie")
-                                    {
-                                        title = result.Title;
-                                        try { year2 = result.ReleaseDate.Year.ToString(); } catch (Exception) { }
-                                    }
-                                    else if (type == "tv")
-                                    {
-                                        title = result.Name;
-                                        try { year2 = result.FirstAirDate.Year.ToString(); } catch (Exception) { }
-                                    }
-                                    if (year == 0 || year.ToString() == year2) {
-                                        title = title.Replace(".", " ");
-                                        title = Regex.Replace(title, @"[^0-9a-zA-Z\s]", string.Empty);
-                                        title = new Regex("[ ]{2,}", RegexOptions.None).Replace(title, " ");
+                                response = new RestClient("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&language=en-US&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&year=" + year.ToString()).Execute(new RestRequest(Method.GET));
+                            }
+                            dynamic responseContent = null;
 
-                                        double match_case = CalculateSimilarity(title.ToLower(), name.ToLower());
-                                        //Log(title.ToLower() + " := " + name.ToLower() + " with " + match_case.ToString(), "Msg");
-                                        if (match_case > most_match)
+                            if (type == "collection")
+                            {
+                                responseContent = JsonConvert.DeserializeObject<TMDB_collection>(response.Content);
+                            }
+                            else if (type == "movie")
+                            {
+                                responseContent = JsonConvert.DeserializeObject<TMDB_movie>(response.Content);
+                            }
+                            else if (type == "tv")
+                            {
+                                responseContent = JsonConvert.DeserializeObject<TMDB_tv>(response.Content);
+                            }
+                            if (responseContent.TotalResults > 0)
+                            {
+                                string closest_index = string.Empty;
+
+                                if (responseContent.TotalResults == 1)
+                                {
+                                    closest_index = "0";
+                                }
+                                else
+                                {
+
+                                    double? most_match = 0.0;
+                                    foreach (dynamic result in responseContent.Results)
+                                    {
+                                        var title = string.Empty;
+                                        var year2 = string.Empty;
+                                        if (type == "collection")
                                         {
-                                            closest_index = responseContent.Results.IndexOf(result).ToString();
-                                            most_match = match_case;
+                                            title = result.Name;
+                                        }
+                                        else if (type == "movie")
+                                        {
+                                            title = result.Title;
+                                            try { year2 = result.ReleaseDate.Year.ToString(); } catch (Exception) { }
+                                        }
+                                        else if (type == "tv")
+                                        {
+                                            title = result.Name;
+                                            try { year2 = result.FirstAirDate.Year.ToString(); } catch (Exception) { }
+                                        }
+                                        if (year == 0 || year.ToString() == year2)
+                                        {
+                                            title = title.Replace(".", " ");
+                                            title = Regex.Replace(title, @"[^0-9a-zA-Z\s]", string.Empty);
+                                            title = new Regex("[ ]{2,}", RegexOptions.None).Replace(title, " ");
+
+                                            double match_case = CalculateSimilarity(title.ToLower(), name.ToLower());
+                                            //Log(title.ToLower() + " := " + name.ToLower() + " with " + match_case.ToString(), "Msg");
+                                            if (match_case > most_match)
+                                            {
+                                                closest_index = responseContent.Results.IndexOf(result).ToString();
+                                                most_match = match_case;
+                                            }
+                                        }
+                                    }
+                                    //}
+                                }
+                                try
+                                {
+                                    if (closest_index != string.Empty)
+                                    {
+                                        if (type == "tv")
+                                        {
+
+                                            // Set your Apikey
+                                            FanartTv.API.Key = "e0151f36c7575f70eb43869fdc85e46c";
+
+                                            MessageBox.Show(name.Replace(" ", ""));
+                                            FanartTv.TV.Show show = gettvID(name.Replace(" ", "")).Result;
+
+                                            //MessageBox.Show(show.List.Name);
+
+                                            mainBitmap = new Bitmap(WebRequest.Create(show.List.Seasonposter[s_number].Url).GetResponse().GetResponseStream());
+                                            Log("Poster Found.", "Success");
+                                            goto posterFound;
+                                        }
+                                        else
+                                        {
+                                            mainBitmap = new Bitmap(WebRequest.Create("https://image.tmdb.org/t/p/w500" + responseContent.Results[Convert.ToInt32(closest_index)].PosterPath).GetResponse().GetResponseStream());
+                                            Log("Poster Found.", "Success");
+                                            goto posterFound;
                                         }
                                     }
                                 }
-                                //}
+                                catch (Exception ex) { MessageBox.Show(ex.ToString()); }
                             }
-                            try
-                            {
-                                if (closest_index != string.Empty)
-                                {
-                                    if (type == "tv")
-                                    {
-                                        FanartTv.TV.Show show = gettvID(name).Result;
 
-                                        MessageBox.Show(show.List.Name);
-                                    }
-                                    else
-                                    {
-                                        mainBitmap = new Bitmap(WebRequest.Create("https://image.tmdb.org/t/p/w500" + responseContent.Results[Convert.ToInt32(closest_index)].PosterPath).GetResponse().GetResponseStream());
-                                        Log("Poster Found.", "Success");
-                                        goto posterFound;
-                                    }
-                                }
-                            }
-                            catch (Exception) { }
+                            name = name.Substring(0, name.Length - 1);
+                            m = new MethodInvoker(() => Mini_ProgressBar.PerformStep());
+                            Mini_ProgressBar.Invoke(m);
                         }
-                        else
-                        {
-                            Log("   No results", "Msg");
-                        }
-
-                        name = name.Substring(0, name.Length - 1);
-                        m = new MethodInvoker(() => Mini_ProgressBar.PerformStep());
-                        Mini_ProgressBar.Invoke(m);
                     }
                 }
-            }
-        posterFound:
-            if (mainBitmap != null)
-            {
-                Bitmap convertedBitmap = new Bitmap(256, 256);
-
-                double scale = mainBitmap.Height / 256.0;
-
-                var width = (int)(mainBitmap.Width / scale);
-                var height = (int)(mainBitmap.Height / scale);
-
-                var destRect = new Rectangle(0, 0, width, height);
-                var destImage = new Bitmap(width, height);
-
-                using (var graphics = Graphics.FromImage(destImage))
+            posterFound:
+                if (mainBitmap != null)
                 {
-                    graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
-                    graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-                    graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                    graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                    graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                    Bitmap convertedBitmap = new Bitmap(256, 256);
 
-                    using (var wrapMode = new ImageAttributes())
+                    double scale = mainBitmap.Height / 256.0;
+
+                    var width = (int)(mainBitmap.Width / scale);
+                    var height = (int)(mainBitmap.Height / scale);
+
+                    var destRect = new Rectangle(0, 0, width, height);
+                    var destImage = new Bitmap(width, height);
+
+                    using (var graphics = Graphics.FromImage(destImage))
                     {
-                        wrapMode.SetWrapMode(System.Drawing.Drawing2D.WrapMode.TileFlipXY);
-                        graphics.DrawImage(mainBitmap, destRect, 0, 0, mainBitmap.Width, mainBitmap.Height, GraphicsUnit.Pixel, wrapMode);
+                        graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                        graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                        graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                        graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                        graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+
+                        using (var wrapMode = new ImageAttributes())
+                        {
+                            wrapMode.SetWrapMode(System.Drawing.Drawing2D.WrapMode.TileFlipXY);
+                            graphics.DrawImage(mainBitmap, destRect, 0, 0, mainBitmap.Width, mainBitmap.Height, GraphicsUnit.Pixel, wrapMode);
+                        }
                     }
+
+                    convertedBitmap.MakeTransparent(System.Drawing.Color.Transparent);
+                    Graphics g = Graphics.FromImage(convertedBitmap);
+                    g.DrawImage(destImage, new Point((256 - destImage.Width) / 2, 0));
+                    SaveAsIcon(convertedBitmap, directory + @"\folder.ico");
+
+                    File.WriteAllLines(iniPath, new String[] { "[.ShellClassInfo]", "IconFile=" + directory + "folder.ico,0", "[ViewState]", "Mode=", "Vid=", "FolderType=Videos" });
+
+                    hideFile(iniPath);
+                    hideFile(icoPath);
+
+                    SHFOLDERCUSTOMSETTINGS folderSettings = new SHFOLDERCUSTOMSETTINGS
+                    {
+                        dwMask = FolderCustomSettingsMask.IconFile,
+                        pszIconFile = "folder.ico",
+                        iIconIndex = 0
+                    };
+
+                    SHGetSetFolderCustomSettings(ref folderSettings, directory, FolderCustomSettingsRW.ForceWrite);
+
+                    Log("Done.", "Success");
                 }
-
-                convertedBitmap.MakeTransparent(System.Drawing.Color.Transparent);
-                Graphics g = Graphics.FromImage(convertedBitmap);
-                g.DrawImage(destImage, new Point((256 - destImage.Width) / 2, 0));
-                SaveAsIcon(convertedBitmap, directory + @"\folder.ico");
-
-                File.WriteAllLines(iniPath, new String[] { "[.ShellClassInfo]", "IconFile=" + directory + "folder.ico,0", "[ViewState]", "Mode=", "Vid=", "FolderType=Videos" });
-
-                hideFile(iniPath);
-                hideFile(icoPath);
-
-                SHFOLDERCUSTOMSETTINGS folderSettings = new SHFOLDERCUSTOMSETTINGS
+                else
                 {
-                    dwMask = FolderCustomSettingsMask.IconFile,
-                    pszIconFile = "folder.ico",
-                    iIconIndex = 0
-                };
-
-                SHGetSetFolderCustomSettings(ref folderSettings, directory, FolderCustomSettingsRW.ForceWrite);
-
-                Log("Done.", "Success");
-            }
-            else
-            {
-                Log("No Posters Found.", "Error");
+                    Log("No Posters Found.", "Error");
+                }
             }
         }
 

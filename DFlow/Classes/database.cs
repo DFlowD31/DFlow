@@ -77,7 +77,7 @@ namespace DFlow
             return returnValue;
         }
 
-        public string Get_From_Database(string txt, bool Count = false)
+        public string Get_From_Database(string txt)//, bool Count = false
         {
             string Return_Value = "";
             try

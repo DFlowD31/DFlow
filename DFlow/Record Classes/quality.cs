@@ -26,7 +26,7 @@ namespace DFlow
         private bool _disposed = false;
 
         // Instantiate a SafeHandle instance.
-        private SafeHandle _safeHandle = new SafeFileHandle(IntPtr.Zero, true);
+        private readonly SafeHandle _safeHandle = new SafeFileHandle(IntPtr.Zero, true);
 
         // Public implementation of Dispose pattern callable by consumers.
         public void Dispose() => Dispose(true);
