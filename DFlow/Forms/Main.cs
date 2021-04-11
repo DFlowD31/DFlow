@@ -113,7 +113,11 @@ namespace DFlow
                 Log("Connection Successfull...", "Success", true, true, false);
                 //Fill_Classes.RunWorkerAsync();
                 //Qualities = (List<quality>)database.getObjectFromDatabase<quality>();
-            }
+            };
+
+            var response = new RestClient("https://api.themoviedb.org/3/authentication/token/new?api_key=9a49cbab6d640fd9483fbdd2abe22b94") { Proxy = SimpleWebProxy.Default }.Execute(new RestRequest(Method.GET));
+            if (response != null)
+                Log("TMDB connection successfull", "Success");
 
         }
 
@@ -1257,9 +1261,7 @@ namespace DFlow
             // Set your Apikey
             API.Key = "e0151f36c7575f70eb43869fdc85e46c";
 
-            await new TraktClient("6129e911f65e311e9b6b47826701c92c89efe788e9ba14696698fbd2feb8b45a", "1f981cf20baf5c306be6f75a102edc84757d5df3e1a5347e52121352ed4573bd").Shows.GetShowAliasesAsync(name);
-
-            return new FanartTv.TV.Show((await new TraktClient("6129e911f65e311e9b6b47826701c92c89efe788e9ba14696698fbd2feb8b45a", "1f981cf20baf5c306be6f75a102edc84757d5df3e1a5347e52121352ed4573bd").Shows.GetShowAsync(name, new TraktExtendedInfo().SetFull())).Value.Ids.Imdb.ToString());
+            return new FanartTv.TV.Show((await new TraktClient("6129e911f65e311e9b6b47826701c92c89efe788e9ba14696698fbd2feb8b45a", "1f981cf20baf5c306be6f75a102edc84757d5df3e1a5347e52121352ed4573bd").Shows.GetShowAsync(name, new TraktExtendedInfo().SetFull())).Value.Ids.Tvdb.ToString());
         }
 
         private void icoFromImage_DoWork(object sender, DoWorkEventArgs e)
@@ -1295,19 +1297,18 @@ namespace DFlow
                     {
                         try
                         {
-                            string s_full = Regex.Match(name, @"Season \d+").ToString();
-                            string s_short = Regex.Match(name, @"S\d{2}E\d{2}").ToString();
-                            string s_simple = Regex.Match(name, @"S\d{2}").ToString();
-                            if (s_simple != null) { s_number = Convert.ToInt32(Regex.Match(s_simple, @"\d{2}").Groups[0].Value); }
-
-                            else if (s_short != null)
-                                s_number = Convert.ToInt32(Regex.Match(s_short, @"\d{2}").Groups[0].Value);
-                            else if (s_full != null)
-                                s_number = Convert.ToInt32(Regex.Match(s_full, @"\d2").Groups[0].Value);
+                            if (name.Contains("第") && name.Contains("期"))
+                            {
+                                s_number = Convert.ToInt32(Regex.Match(Regex.Match(name, @"(?:第 \d+ 期|第 \d{2} 期)|\d+|\d{2}").ToString(), @"\d{2}|\d+").Groups[0].Value);
+                            }
+                            else
+                            {
+                                s_number = Convert.ToInt32(Regex.Match(Regex.Match(name, @"(?:Season \d+|Season \d{2})|S\d{2}E\d{2}|S\d{2}|S\d+|S\d+E\d+|\d+|\d{2}").ToString(), @"\d{2}|\d+").Groups[0].Value);
+                            }
                         }
                         catch (Exception) { }
                     }
-
+                    
                     removeFromName<quality>(ref name);
                     //removeFromName<audio_channel>(ref name);
                     removeFromName<audio_codec>(ref name);
@@ -1330,7 +1331,7 @@ namespace DFlow
                     if (years.Count() == 0)
                         years.Add(0);
 
-                    name = Regex.Replace(name, @"[^0-9a-zA-Z\s&]", string.Empty);
+                    name = Regex.Replace(name, @"[^0-9a-zA-Z\s&一-龯ぁ-んァ-ン\w！：／・]", string.Empty);
                     name = new Regex("[ ]{2,}", RegexOptions.None).Replace(name, " ");
                     name = name.ToLower();
 
@@ -1346,21 +1347,20 @@ namespace DFlow
                     MethodInvoker m = new MethodInvoker(() => { Mini_ProgressBar.Maximum = name.Length; Mini_ProgressBar.Value = 0; });
                     Mini_ProgressBar.Invoke(m);
 
-                    while (name.Length > 0)
+                    while (name != string.Empty)
                     {
                         foreach (int year in years)
                         {
-
                             //Log("Searching for := " + folderName + " as:= " + name + " Year:= (" + year + ")", "Warning");
                             IRestResponse response = null;
                             if (type == "tv")
                             {
-                                response = new RestClient("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&language=en-US&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&first_air_date_year=" + year.ToString()).Execute(new RestRequest(Method.GET));
+                                response = new RestClient("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&first_air_date_year=" + year.ToString()).Execute(new RestRequest(Method.GET));
                                 //Log("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&language=en-US&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&first_air_date_year=" + year.ToString(), "Msg");
                             }
                             else
                             {
-                                response = new RestClient("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&language=en-US&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&year=" + year.ToString()).Execute(new RestRequest(Method.GET));
+                                response = new RestClient("https://api.themoviedb.org/3/search/" + type + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&year=" + year.ToString()).Execute(new RestRequest(Method.GET));
                             }
                             dynamic responseContent = null;
 
@@ -1376,6 +1376,7 @@ namespace DFlow
                             {
                                 responseContent = JsonConvert.DeserializeObject<TMDB_tv>(response.Content);
                             }
+
                             if (responseContent.TotalResults > 0)
                             {
                                 string closest_index = string.Empty;
@@ -1403,13 +1404,13 @@ namespace DFlow
                                         }
                                         else if (type == "tv")
                                         {
-                                            title = result.Name;
+                                            title = result.OriginalName;
                                             try { year2 = result.FirstAirDate.Year.ToString(); } catch (Exception) { }
                                         }
                                         if (year == 0 || year.ToString() == year2)
                                         {
                                             title = title.Replace(".", " ");
-                                            title = Regex.Replace(title, @"[^0-9a-zA-Z\s]", string.Empty);
+                                            title = Regex.Replace(title, @"[^0-9a-zA-Z\s&一-龯ぁ-んァ-ン\w！：／・]", string.Empty);
                                             title = new Regex("[ ]{2,}", RegexOptions.None).Replace(title, " ");
 
                                             double match_case = CalculateSimilarity(title.ToLower(), name.ToLower());
@@ -1429,16 +1430,29 @@ namespace DFlow
                                     {
                                         if (type == "tv")
                                         {
-
                                             // Set your Apikey
-                                            FanartTv.API.Key = "e0151f36c7575f70eb43869fdc85e46c";
+                                            if (s_number > 0)
+                                            {
+                                                Log("https://api.themoviedb.org/3/tv/" + responseContent.Results[Convert.ToInt32(closest_index)].Id + "/season/" + s_number + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94", "Warning");
+                                                IRestResponse seasonResponse = new RestClient("https://api.themoviedb.org/3/tv/" + responseContent.Results[Convert.ToInt32(closest_index)].Id + "/season/" + s_number + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94").Execute(new RestRequest(Method.GET));
+                                                try
+                                                {
+                                                    dynamic seasonResponseContent = Newtonsoft.Json.Linq.JObject.Parse(seasonResponse.Content);
 
-                                            MessageBox.Show(name.Replace(" ", ""));
-                                            FanartTv.TV.Show show = gettvID(name.Replace(" ", "")).Result;
+                                                    mainBitmap = new Bitmap(WebRequest.Create("https://image.tmdb.org/t/p/w500" + seasonResponseContent.poster_path).GetResponse().GetResponseStream());
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    MessageBox.Show(ex.ToString());
+                                                    mainBitmap = new Bitmap(WebRequest.Create("https://image.tmdb.org/t/p/w500" + responseContent.Results[Convert.ToInt32(closest_index)].PosterPath).GetResponse().GetResponseStream());
+                                                }
 
-                                            //MessageBox.Show(show.List.Name);
+                                            }
+                                            else
+                                            {
+                                                mainBitmap = new Bitmap(WebRequest.Create("https://image.tmdb.org/t/p/w500" + responseContent.Results[Convert.ToInt32(closest_index)].PosterPath).GetResponse().GetResponseStream());
+                                            }
 
-                                            mainBitmap = new Bitmap(WebRequest.Create(show.List.Seasonposter[s_number].Url).GetResponse().GetResponseStream());
                                             Log("Poster Found.", "Success");
                                             goto posterFound;
                                         }
@@ -1450,10 +1464,13 @@ namespace DFlow
                                         }
                                     }
                                 }
-                                catch (Exception ex) { MessageBox.Show(ex.ToString()); }
+                                catch (Exception ex) { }
                             }
 
-                            name = name.Substring(0, name.Length - 1);
+                            if (name.Contains(" "))
+                                name = name.Substring(0, name.LastIndexOf(" "));
+                            else
+                                name = string.Empty;
                             m = new MethodInvoker(() => Mini_ProgressBar.PerformStep());
                             Mini_ProgressBar.Invoke(m);
                         }
@@ -1529,8 +1546,17 @@ namespace DFlow
 
             foreach (string directory in directories)
             {
+                string the_directory = directory;
                 while (icoFromImage.IsBusy) { }
-                icoFromImage.RunWorkerAsync(new List<string> { directory, type });
+                if ((directory.Substring(directory.LastIndexOf(@"\") + 1).ToLower().StartsWith("season ")) || (directory.Substring(directory.LastIndexOf(@"\") + 1).StartsWith("第") && directory.Substring(directory.LastIndexOf(@"\") + 1).EndsWith("期")) || Regex.IsMatch(directory.Substring(directory.LastIndexOf(@"\") + 1), @"^\d+|^\d{2}"))
+                {
+                    string season = directory.Substring(directory.LastIndexOf(@"\") + 1);
+                    string series_name = directory.Substring(0, directory.LastIndexOf(@"\"));
+                    series_name = series_name.Substring(series_name.LastIndexOf(@"\") + 1);
+                    Directory.Move(directory, directory.Substring(0, directory.LastIndexOf(@"\") + 1) + series_name + " " + season);
+                    the_directory = directory.Substring(0, directory.LastIndexOf(@"\") + 1) + series_name + " " + season;
+                }
+                icoFromImage.RunWorkerAsync(new List<string> { the_directory, type });
                 Status_Text.Text = (directories.IndexOf(directory) + 1).ToString() + "/" + directories.Count();
                 icoFromImageQueuer.ReportProgress((directories.IndexOf(directory)) + 1);
             }

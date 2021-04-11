@@ -85,6 +85,7 @@ namespace DFlow.Classes
         public static string ToJson(this TMDB_movie self) => JsonConvert.SerializeObject(self, DFlow.Classes.Converter.Settings);
         public static string ToJson(this TMDB_collection self) => JsonConvert.SerializeObject(self, DFlow.Classes.Converter.Settings);
         public static string ToJson(this TMDB_tv self) => JsonConvert.SerializeObject(self, DFlow.Classes.Converter.Settings);
+        public static string ToJson(this TMDB_season self) => JsonConvert.SerializeObject(self, DFlow.Classes.Converter.Settings);
     }
 
     internal static class Converter

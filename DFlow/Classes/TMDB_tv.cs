@@ -12,6 +12,7 @@ namespace DFlow.Classes
     using System.Collections.Generic;
 
     using System.Globalization;
+    using System.Net;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
@@ -75,5 +76,30 @@ namespace DFlow.Classes
     public partial class TMDB_tv
     {
         public static TMDB_tv FromJson(string json) => JsonConvert.DeserializeObject<TMDB_tv>(json, DFlow.Classes.Converter.Settings);
+    }
+
+    public class SimpleWebProxy : IWebProxy
+    {
+        public ICredentials Credentials { get; set; }
+
+        public Uri GetProxy(Uri destination)
+        {
+            return destination;
+        }
+
+        public bool IsBypassed(Uri host)
+        {
+            // if return true, service will be very slow.
+            return false;
+        }
+
+        private static SimpleWebProxy defaultProxy = new SimpleWebProxy();
+        public static SimpleWebProxy Default
+        {
+            get
+            {
+                return defaultProxy;
+            }
+        }
     }
 }
