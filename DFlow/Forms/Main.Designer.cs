@@ -26,6 +26,7 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
+        [System.Obsolete]
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
@@ -33,7 +34,7 @@
             this.Anime_Browse = new System.Windows.Forms.Button();
             this.Log_Panel = new System.Windows.Forms.Panel();
             this.Log_Text = new System.Windows.Forms.RichTextBox();
-            this.Server_Config = new System.Windows.Forms.Button();
+            this.Poster = new System.Windows.Forms.Button();
             this.ProgressBar = new MetroFramework.Controls.MetroProgressBar();
             this.Mini_ProgressBar = new MetroFramework.Controls.MetroProgressBar();
             this.Destination = new MetroFramework.Controls.MetroTextBox();
@@ -98,20 +99,20 @@
             this.Log_Text.TabIndex = 33;
             this.Log_Text.Text = "";
             // 
-            // Server_Config
+            // Poster
             // 
-            this.Server_Config.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
-            this.Server_Config.FlatAppearance.BorderSize = 0;
-            this.Server_Config.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Server_Config.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.Server_Config.ForeColor = System.Drawing.Color.White;
-            this.Server_Config.Location = new System.Drawing.Point(156, 63);
-            this.Server_Config.Name = "Server_Config";
-            this.Server_Config.Size = new System.Drawing.Size(127, 23);
-            this.Server_Config.TabIndex = 51;
-            this.Server_Config.Text = "Server Config";
-            this.Server_Config.UseVisualStyleBackColor = false;
-            this.Server_Config.Click += new System.EventHandler(this.Server_Config_Click);
+            this.Poster.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
+            this.Poster.FlatAppearance.BorderSize = 0;
+            this.Poster.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Poster.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.Poster.ForeColor = System.Drawing.Color.White;
+            this.Poster.Location = new System.Drawing.Point(156, 63);
+            this.Poster.Name = "Poster";
+            this.Poster.Size = new System.Drawing.Size(127, 23);
+            this.Poster.TabIndex = 51;
+            this.Poster.Text = "Poster";
+            this.Poster.UseVisualStyleBackColor = false;
+            this.Poster.Click += new System.EventHandler(this.Poster_Click);
             // 
             // ProgressBar
             // 
@@ -372,7 +373,7 @@
             this.Controls.Add(this.Anime_Browse);
             this.Controls.Add(this.Movie_Folder);
             this.Controls.Add(this.Log_Panel);
-            this.Controls.Add(this.Server_Config);
+            this.Controls.Add(this.Poster);
             this.Controls.Add(this.ProgressBar);
             this.Controls.Add(this.Mini_ProgressBar);
             this.Controls.Add(this.Destination);
@@ -403,7 +404,7 @@
         internal System.Windows.Forms.Button Anime_Browse;
         internal System.Windows.Forms.Panel Log_Panel;
         public System.Windows.Forms.RichTextBox Log_Text;
-        private System.Windows.Forms.Button Server_Config;
+        private System.Windows.Forms.Button Poster;
         internal MetroFramework.Controls.MetroProgressBar ProgressBar;
         internal MetroFramework.Controls.MetroProgressBar Mini_ProgressBar;
         internal MetroFramework.Controls.MetroTextBox Destination;

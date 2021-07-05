@@ -28,6 +28,8 @@ using TraktNet;
 using TraktNet.Responses;
 using TraktNet.Objects.Get.Shows;
 using TraktNet.Requests.Parameters;
+using Matroska;
+using ClosedXML.Excel;
 
 namespace DFlow
 {
@@ -104,6 +106,7 @@ namespace DFlow
             public uint cchLogo;
         }
 
+        [Obsolete]
         public Main()
         {
             InitializeComponent();
@@ -115,9 +118,9 @@ namespace DFlow
                 //Qualities = (List<quality>)database.getObjectFromDatabase<quality>();
             };
 
-            var response = new RestClient("https://api.themoviedb.org/3/authentication/token/new?api_key=9a49cbab6d640fd9483fbdd2abe22b94") { Proxy = SimpleWebProxy.Default }.Execute(new RestRequest(Method.GET));
-            if (response != null)
-                Log("TMDB connection successfull", "Success");
+            //var response = new RestClient("https://api.themoviedb.org/3/authentication/token/new?api_key=9a49cbab6d640fd9483fbdd2abe22b94") { Proxy = SimpleWebProxy.Default }.Execute(new RestRequest(Method.GET));
+            //if (response != null)
+            //    Log("TMDB connection successfull", "Success");
 
         }
 
@@ -137,13 +140,13 @@ namespace DFlow
                         else
                             Log_Text.Select(Log_Text.TextLength - str.Length, str.Length);
                         if (Type == "Success")
-                            Log_Text.SelectionColor = Color.LimeGreen;
+                            Log_Text.SelectionColor = System.Drawing.Color.LimeGreen;
                         else if (Type == "Error")
-                            Log_Text.SelectionColor = Color.Crimson;
+                            Log_Text.SelectionColor = System.Drawing.Color.Crimson;
                         else if (Type == "Warning")
-                            Log_Text.SelectionColor = Color.DarkOrange;
+                            Log_Text.SelectionColor = System.Drawing.Color.DarkOrange;
                         else if (Type == "Msg")
-                            Log_Text.SelectionColor = Color.Black;
+                            Log_Text.SelectionColor = System.Drawing.Color.Black;
                         Log_Text.ScrollToCaret();
                     }));
                 }
@@ -157,13 +160,13 @@ namespace DFlow
                     else
                         Log_Text.Select(Log_Text.TextLength - str.Length, str.Length);
                     if (Type == "Success")
-                        Log_Text.SelectionColor = Color.LimeGreen;
+                        Log_Text.SelectionColor = System.Drawing.Color.LimeGreen;
                     else if (Type == "Error")
-                        Log_Text.SelectionColor = Color.Crimson;
+                        Log_Text.SelectionColor = System.Drawing.Color.Crimson;
                     else if (Type == "Warning")
-                        Log_Text.SelectionColor = Color.DarkOrange;
+                        Log_Text.SelectionColor = System.Drawing.Color.DarkOrange;
                     else if (Type == "Msg")
-                        Log_Text.SelectionColor = Color.Black;
+                        Log_Text.SelectionColor = System.Drawing.Color.Black;
                     Log_Text.ScrollToCaret();
                 }
             }
@@ -378,7 +381,69 @@ namespace DFlow
         }
         private void Movie_File_Click(object sender, EventArgs e)
         {
+            try
+            {
+                XLWorkbook workBook = new XLWorkbook(@"C:\Users\dashu\OneDrive\Documents\CV\Oddelger Dash-Ulziit - 職務経歴書.xlsx");
 
+
+                workBook.SaveAs(@"C:\Users\dashu\OneDrive\Documents\CV\Oddelger Dash-Ulziit - 職務経歴書 - 2.xlsx");
+
+                //workBook.LoadFromFile(@"C:\Users\dashu\OneDrive\Documents\CV\Oddelger Dash-Ulziit - 職務経歴書.xlsx");
+
+                //workBook.SaveToFile(@"C:\Users\dashu\OneDrive\Documents\CV\Oddelger Dash-Ulziit - 職務経歴書 - 2.xlsx");
+
+                //var workBook = new XSSFWorkbook(@"C:\Users\dashu\OneDrive\Documents\CV\Oddelger Dash-Ulziit - 職務経歴書.xlsx");
+
+                //using (FileStream fs = new FileStream(@"C:\Users\dashu\OneDrive\Documents\CV\Oddelger Dash-Ulziit - 職務経歴書 - 2.xlsx", FileMode.OpenOrCreate, FileAccess.Write))
+                //{
+                //    workBook.Write(fs);
+                //}
+
+                //if (Open_File_Dialog.ShowDialog() == DialogResult.OK) {
+                //    var fileName = Open_File_Dialog.SafeFileName;
+                //    var filePath = Open_File_Dialog.FileName;
+
+                //    if (fileName.Substring(fileName.LastIndexOf(".") + 1) == "mkv") {
+
+                //        var file = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+                //        var doc = MatroskaSerializer.Deserialize(file);
+
+                //        if (doc.Segment.Attachments != null)
+                //        {
+                //            MessageBox.Show("Has attachment.");
+                //        }
+                //        else {
+                //            MessageBox.Show("No attachment");
+                //        }
+                //        //var file = new FileStream("propedit.bat", FileMode.CreateNew, FileAccess.ReadWrite);
+
+                //        //file.Write(@"""C:\Program Files\MKVToolnix\mkvpropedit.exe""");
+                //    }
+                //}
+                //var file = new FileStream(@"D:\Torrent Downloads\Tom and Jerry (2021)  [1080p x265 10bit S81 Joy].mkv", FileMode.Open, FileAccess.Read);
+                //var doc = MatroskaSerializer.Deserialize(file);
+
+                ////MessageBox.Show(doc.Segment.Tracks.TrackEntries.ToString());
+                //foreach (var track in doc.Segment.Tracks.TrackEntries) {
+                //    if (track.TrackType == 17)
+                //    {
+                //        //Log(track.LanguageIETF.ToString(), "Message");
+                //    }
+                //    else if (track.TrackType == 1) {
+                //        Log(track.Video.DisplayWidth + ":" + track.Video.DisplayHeight, "Message");
+                //    }
+                //    if (track.AttachmentLink.HasValue) {
+                //        Log(track.AttachmentLink.Value.ToString(), "Message");
+                //    }
+                //}
+
+                //@"""C:\Program Files\MKVToolNix\mkvmerge.exe"" --ui-language en --output ^""D:\MKV Convertions\Tom and Jerry (2021) [1080p x265 10bit S81 Joy].mkv^"" --language 0:und --display-dimensions 0:1920x1040 --language 1:en
+
+                //Log(doc.Segment.Tracks.TrackEntries[0].Name.ToString(), "Message");
+                //MessageBox.Show("Done");
+            }
+            catch (Exception ex) { Log(ex.ToString(), "Error"); }
         }
 
         private void Merge_Button_Click(object sender, EventArgs e)
@@ -511,7 +576,7 @@ namespace DFlow
                 Mini_ProgressBar.Value = 0;
                 Status_Text.Text = "All Done";
                 Status_Text.BeginInvoke(new MethodInvoker(Visible_Status));
-                Status_Text.ForeColor = Color.Green;
+                Status_Text.ForeColor = System.Drawing.Color.Green;
                 Merge_Button.Text = "Merge Movies";
             }
             catch (Exception ex) { Log(ex.ToString(), "Error"); }
@@ -540,7 +605,7 @@ namespace DFlow
         }
 
         [Obsolete]
-        private void Server_Config_Click(object sender, EventArgs e)
+        private void Poster_Click(object sender, EventArgs e)
         {
             //new movie_record().Show();
 
@@ -585,6 +650,7 @@ namespace DFlow
                 if (MessageBox.Show("Multiple movie container?", "Directory type", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     String[] directories = Directory.GetDirectories(Folder_Browser_Dialog.SelectedPath);
+                    String[] files = Directory.GetFiles(Folder_Browser_Dialog.SelectedPath);
                     ProgressBar.Step = 1;
                     ProgressBar.Maximum = directories.Count();
                     icoFromImageQueuer.RunWorkerAsync(directories);
@@ -884,7 +950,7 @@ namespace DFlow
                 }
                 Status_Text.Text = "Done";
                 Status_Text.Visible = true;
-                Status_Text.ForeColor = Color.Green;
+                Status_Text.ForeColor = System.Drawing.Color.Green;
             }
         }
 
@@ -1088,7 +1154,7 @@ namespace DFlow
                         Mini_ProgressBar.Value = 0;
                         Status_Text.Text = "All Done";
                         Status_Text.Visible = true;
-                        Status_Text.ForeColor = Color.Green;
+                        Status_Text.ForeColor = System.Drawing.Color.Green;
                         rename_episode_index = 1;
                     }
                     //Try
@@ -1288,6 +1354,20 @@ namespace DFlow
                     string name = directory.Substring(directory.LastIndexOf(@"\") + 1);
                     List<int> years = new List<int>();
 
+                    Regex regex = new Regex(@"\d{4}");
+
+                    foreach (Match match in regex.Matches(name))
+                    {
+                        years.Add(Convert.ToInt32(match.Value));
+                    }
+
+                    years.Sort((a, b) => b.CompareTo(a));
+
+                    try { name = Regex.Replace(name, $@"\b{years[0]}\b", string.Empty); } catch (Exception) { }
+
+                    if (years.Count() == 0)
+                        years.Add(0);
+
                     string folderName = name;
                     int s_number = 0;
 
@@ -1303,33 +1383,18 @@ namespace DFlow
                             }
                             else
                             {
-                                s_number = Convert.ToInt32(Regex.Match(Regex.Match(name, @"(?:Season \d+|Season \d{2})|S\d{2}E\d{2}|S\d{2}|S\d+|S\d+E\d+|\d+|\d{2}").ToString(), @"\d{2}|\d+").Groups[0].Value);
+                                s_number = Convert.ToInt32(Regex.Match(Regex.Match(name, @"(?:Season \d+|Season \d{2})|(S\d{2}E\d{2})|(S\d{2})|(S\d+)|(S\d+E\d+)|(\d+)|(\d{2})").ToString(), @"\d{2}|\d+").Groups[0].Value);
                             }
                         }
                         catch (Exception) { }
                     }
                     
                     removeFromName<quality>(ref name);
-                    //removeFromName<audio_channel>(ref name);
                     removeFromName<audio_codec>(ref name);
                     removeFromName<encoder>(ref name);
                     removeFromName<source>(ref name);
                     removeFromName<video_codec>(ref name);
                     removeFromName<language>(ref name);
-
-                    Regex regex = new Regex(@"\d{4}");
-
-                    foreach (Match match in regex.Matches(name))
-                    {
-                        years.Add(Convert.ToInt32(match.Value));
-                    }
-
-                    years.Sort((a, b) => b.CompareTo(a));
-
-                    try { name = Regex.Replace(name, $@"\b{years[0]}\b", string.Empty); } catch (Exception) { }
-
-                    if (years.Count() == 0)
-                        years.Add(0);
 
                     name = Regex.Replace(name, @"[^0-9a-zA-Z\s&一-龯ぁ-んァ-ン\w！：／・]", string.Empty);
                     name = new Regex("[ ]{2,}", RegexOptions.None).Replace(name, " ");
@@ -1341,6 +1406,8 @@ namespace DFlow
                         name = name.Replace("collection", string.Empty);
                         name = new Regex("[ ]{2,}", RegexOptions.None).Replace(name, " ");
                     }
+
+                    removeFromName<audio_channel>(ref name);
 
                     Log("Simplified name:= " + name, "Msg");
 
@@ -1464,7 +1531,7 @@ namespace DFlow
                                         }
                                     }
                                 }
-                                catch (Exception ex) { }
+                                catch (Exception) { }
                             }
 
                             if (name.Contains(" "))
