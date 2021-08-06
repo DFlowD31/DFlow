@@ -29,7 +29,6 @@ using TraktNet.Responses;
 using TraktNet.Objects.Get.Shows;
 using TraktNet.Requests.Parameters;
 using Matroska;
-using ClosedXML.Excel;
 
 namespace DFlow
 {
@@ -383,22 +382,6 @@ namespace DFlow
         {
             try
             {
-                XLWorkbook workBook = new XLWorkbook(@"C:\Users\dashu\OneDrive\Documents\CV\Oddelger Dash-Ulziit - 職務経歴書.xlsx");
-
-
-                workBook.SaveAs(@"C:\Users\dashu\OneDrive\Documents\CV\Oddelger Dash-Ulziit - 職務経歴書 - 2.xlsx");
-
-                //workBook.LoadFromFile(@"C:\Users\dashu\OneDrive\Documents\CV\Oddelger Dash-Ulziit - 職務経歴書.xlsx");
-
-                //workBook.SaveToFile(@"C:\Users\dashu\OneDrive\Documents\CV\Oddelger Dash-Ulziit - 職務経歴書 - 2.xlsx");
-
-                //var workBook = new XSSFWorkbook(@"C:\Users\dashu\OneDrive\Documents\CV\Oddelger Dash-Ulziit - 職務経歴書.xlsx");
-
-                //using (FileStream fs = new FileStream(@"C:\Users\dashu\OneDrive\Documents\CV\Oddelger Dash-Ulziit - 職務経歴書 - 2.xlsx", FileMode.OpenOrCreate, FileAccess.Write))
-                //{
-                //    workBook.Write(fs);
-                //}
-
                 //if (Open_File_Dialog.ShowDialog() == DialogResult.OK) {
                 //    var fileName = Open_File_Dialog.SafeFileName;
                 //    var filePath = Open_File_Dialog.FileName;
@@ -607,50 +590,12 @@ namespace DFlow
         [Obsolete]
         private void Poster_Click(object sender, EventArgs e)
         {
-            //new movie_record().Show();
-
-            //var client = new TraktClient("6129e911f65e311e9b6b47826701c92c89efe788e9ba14696698fbd2feb8b45a", "1f981cf20baf5c306be6f75a102edc84757d5df3e1a5347e52121352ed4573bd");
-
-            //TraktResponse<ITraktShow> sherlock = await client.Shows.GetShowAsync("sherlock", new TraktExtendedInfo().SetFull()).ConfigureAwait(false);
-
-            //ITraktShow show = null;
-
-            //if (sherlock)
-            //{
-            //    show = sherlock.Value;
-            //}
-
-            //// Set your Apikey
-            //FanartTv.API.Key = "e0151f36c7575f70eb43869fdc85e46c";
-
-            //FanartTv.TV.Show show2 = new FanartTv.TV.Show(show.Ids.Tvdb.ToString());
-
-            //MessageBox.Show(show2.List.Seasonposter[0].Season);
-
             if (Folder_Browser_Dialog.ShowDialog() == DialogResult.OK)
             {
-                //List<string> strings = Regex.Split(Folder_Browser_Dialog.SelectedPath.Substring(Folder_Browser_Dialog.SelectedPath.LastIndexOf(@"\")), @"\W|_").ToList();
-
-                //string all_s = string.Empty;
-                //string quality = string.Empty;
-
-                //for (int i = strings.Count() - 1; i > 0; i--) {
-                //    List<quality> Q = (List<quality>)database.getObjectFromDatabase<quality>();
-                //    foreach (quality q in Q) {
-                //        if (q.alternate_name.Split(',').ToList().Find(x => x.ToLower() == strings[i].ToLower()) is string y && y != null)
-                //        {
-                //            strings.RemoveAt(i);
-                //            quality = q.name;
-                //        }
-                //    }
-                //}
-
-                //MessageBox.Show(quality);
-
                 if (MessageBox.Show("Multiple movie container?", "Directory type", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     String[] directories = Directory.GetDirectories(Folder_Browser_Dialog.SelectedPath);
-                    String[] files = Directory.GetFiles(Folder_Browser_Dialog.SelectedPath);
+                    //String[] files = Directory.GetFiles(Folder_Browser_Dialog.SelectedPath);
                     ProgressBar.Step = 1;
                     ProgressBar.Maximum = directories.Count();
                     icoFromImageQueuer.RunWorkerAsync(directories);

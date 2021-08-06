@@ -5,7 +5,6 @@ using System.Data;
 using System.Globalization;
 using System.Drawing;
 using System.Linq;
-using Spire.Xls;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -180,81 +179,81 @@ namespace DFlow
         //https://api.jikan.moe/v3/anime/20/episodes/1
         private void GetFromExcel_DoWork(object sender, DoWorkEventArgs e)
         {
-            try
-            {
-                loadingImage.BeginInvoke(new Action(() => loadingImage.Visible = true));
-                using (Workbook workBook = new Workbook())
-                {
-                    workBook.LoadFromFile(Open_File_Dialog.FileName);
-                    Worksheet MySheet = workBook.Worksheets[0];
-                    int inSeason = 1;
-                    int inOverall = 1;
-                    int nameColumn = 2;
-                    int i = 1;
-                    while (!MySheet.Range[i, inOverall].Value.ToLower().Contains(Season.season_english_name.ToLower()) && !MySheet.Range[i, inOverall].Value.ToLower().Contains("season " + the_season_number) && !MySheet.Range[i, inOverall].Value.ToLower().Contains("season " + ((long)the_season_number).ToString("D2")) && i != MySheet.LastRow)
-                    { i += 1; }
-                    if (i != MySheet.LastRow)
-                    {
-                        while (!IsNumeric(MySheet.Range[i, inOverall].Value))
-                        { i += 1; }
-                        if (i != MySheet.LastRow)
-                        {
-                            while (!MySheet.Range[i, inSeason].Value.ToLower().Contains("season") && !MySheet.Range[i, inSeason].Value.ToLower().Contains("arc") && MySheet.Range[i, inSeason].Value.Length < 100 && i != MySheet.LastRow)
-                            {//row, column
-                                if (IsNumeric(MySheet.Range[i, inSeason].Value))
-                                {
-                                    if (IsNumeric(MySheet.Range[i, nameColumn].Value))
-                                    {
-                                        if (MySheet.Range[i - 1, nameColumn].Value.ToLower().Contains("season") || MySheet.Range[i - 1, nameColumn].Value.ToLower().Contains("arc"))
-                                        { inOverall = inSeason; inSeason = nameColumn; nameColumn += 1; }
-                                        else if (MySheet.Range[i - 1, nameColumn].Value.ToLower().Contains("series") || MySheet.Range[i - 1, nameColumn].Value.ToLower().Contains("no") || MySheet.Range[i - 1, nameColumn].Value.ToLower().Contains("overall"))
-                                        { inSeason = inOverall; inOverall = nameColumn; nameColumn += 1; }
-                                        else
-                                            nameColumn += 1;
-                                    }
-                                    if (MySheet.Range[i, nameColumn].Value.Contains("\""))
-                                    {
-                                        long overallNumber = Convert.ToInt64(MySheet.Range[i, inOverall].Value);
-                                        decimal seasonNumber = Convert.ToDecimal(MySheet.Range[i, inSeason].Value);
-                                        string englishName = MySheet.Range[i, nameColumn].Value.Replace("\"", "");
-                                        if (MySheet.Range[i + 1, nameColumn].Value.StartsWith("\"") && MySheet.Range[i + 1, nameColumn].Value.EndsWith("\""))
-                                        { englishName = MySheet.Range[i + 1, nameColumn].Value.Replace("\"", ""); i += 1; }
-                                        else
-                                            englishName = MySheet.Range[i, nameColumn].Value.Replace("\"", "");
-                                        string japaneseName = englishName;
-                                        if (!IsNumeric(MySheet.Range[i + 1, nameColumn - 1].Value))
-                                            japaneseName = MySheet.Range[i + 1, nameColumn].Value.Substring(MySheet.Range[i + 1, nameColumn].Value.ToLower().IndexOf("japanese:") + 10).Replace(")", "");
-                                        int rowIndex = Episodes_DataSource.Rows.IndexOf(Episodes_DataSource.Select("episode_number=" + seasonNumber).FirstOrDefault());
-                                        if (rowIndex >= 0)
-                                        {
-                                            Episodes_DataSource.Rows[rowIndex][3] = englishName;
-                                            Episodes_DataSource.Rows[rowIndex][4] = japaneseName;
-                                            //Episodes_DataSource.Rows[rowIndex][7] = "";
-                                        }
-                                        else
-                                        {
-                                            Episodes_DataSource.Rows.Add(new object[] { the_anime_id, the_season_number, seasonNumber, englishName, japaneseName, (long)1, (long)1, "" });
+            //    try
+            //    {
+            //        loadingImage.BeginInvoke(new Action(() => loadingImage.Visible = true));
+            //        using (Workbook workBook = new Workbook())
+            //        {
+            //            workBook.LoadFromFile(Open_File_Dialog.FileName);
+            //            Worksheet MySheet = workBook.Worksheets[0];
+            //            int inSeason = 1;
+            //            int inOverall = 1;
+            //            int nameColumn = 2;
+            //            int i = 1;
+            //            while (!MySheet.Range[i, inOverall].Value.ToLower().Contains(Season.season_english_name.ToLower()) && !MySheet.Range[i, inOverall].Value.ToLower().Contains("season " + the_season_number) && !MySheet.Range[i, inOverall].Value.ToLower().Contains("season " + ((long)the_season_number).ToString("D2")) && i != MySheet.LastRow)
+            //            { i += 1; }
+            //            if (i != MySheet.LastRow)
+            //            {
+            //                while (!IsNumeric(MySheet.Range[i, inOverall].Value))
+            //                { i += 1; }
+            //                if (i != MySheet.LastRow)
+            //                {
+            //                    while (!MySheet.Range[i, inSeason].Value.ToLower().Contains("season") && !MySheet.Range[i, inSeason].Value.ToLower().Contains("arc") && MySheet.Range[i, inSeason].Value.Length < 100 && i != MySheet.LastRow)
+            //                    {//row, column
+            //                        if (IsNumeric(MySheet.Range[i, inSeason].Value))
+            //                        {
+            //                            if (IsNumeric(MySheet.Range[i, nameColumn].Value))
+            //                            {
+            //                                if (MySheet.Range[i - 1, nameColumn].Value.ToLower().Contains("season") || MySheet.Range[i - 1, nameColumn].Value.ToLower().Contains("arc"))
+            //                                { inOverall = inSeason; inSeason = nameColumn; nameColumn += 1; }
+            //                                else if (MySheet.Range[i - 1, nameColumn].Value.ToLower().Contains("series") || MySheet.Range[i - 1, nameColumn].Value.ToLower().Contains("no") || MySheet.Range[i - 1, nameColumn].Value.ToLower().Contains("overall"))
+            //                                { inSeason = inOverall; inOverall = nameColumn; nameColumn += 1; }
+            //                                else
+            //                                    nameColumn += 1;
+            //                            }
+            //                            if (MySheet.Range[i, nameColumn].Value.Contains("\""))
+            //                            {
+            //                                long overallNumber = Convert.ToInt64(MySheet.Range[i, inOverall].Value);
+            //                                decimal seasonNumber = Convert.ToDecimal(MySheet.Range[i, inSeason].Value);
+            //                                string englishName = MySheet.Range[i, nameColumn].Value.Replace("\"", "");
+            //                                if (MySheet.Range[i + 1, nameColumn].Value.StartsWith("\"") && MySheet.Range[i + 1, nameColumn].Value.EndsWith("\""))
+            //                                { englishName = MySheet.Range[i + 1, nameColumn].Value.Replace("\"", ""); i += 1; }
+            //                                else
+            //                                    englishName = MySheet.Range[i, nameColumn].Value.Replace("\"", "");
+            //                                string japaneseName = englishName;
+            //                                if (!IsNumeric(MySheet.Range[i + 1, nameColumn - 1].Value))
+            //                                    japaneseName = MySheet.Range[i + 1, nameColumn].Value.Substring(MySheet.Range[i + 1, nameColumn].Value.ToLower().IndexOf("japanese:") + 10).Replace(")", "");
+            //                                int rowIndex = Episodes_DataSource.Rows.IndexOf(Episodes_DataSource.Select("episode_number=" + seasonNumber).FirstOrDefault());
+            //                                if (rowIndex >= 0)
+            //                                {
+            //                                    Episodes_DataSource.Rows[rowIndex][3] = englishName;
+            //                                    Episodes_DataSource.Rows[rowIndex][4] = japaneseName;
+            //                                    //Episodes_DataSource.Rows[rowIndex][7] = "";
+            //                                }
+            //                                else
+            //                                {
+            //                                    Episodes_DataSource.Rows.Add(new object[] { the_anime_id, the_season_number, seasonNumber, englishName, japaneseName, (long)1, (long)1, "" });
 
-                                            //Qualities
-                                            ((DataGridViewComboBoxCell)dataGridView.Rows[dataGridView.Rows.Count - 2].Cells[9]).Value = (long?)1;
+            //                                    //Qualities
+            //                                    ((DataGridViewComboBoxCell)dataGridView.Rows[dataGridView.Rows.Count - 2].Cells[9]).Value = (long?)1;
 
-                                            //Sources
-                                            ((DataGridViewComboBoxCell)dataGridView.Rows[dataGridView.Rows.Count - 2].Cells[10]).Value = (long?)1;
-                                        }
-                                    }
-                                }
-                                i += 1;
-                            }
-                        }
-                    }
-                    MySheet.Dispose();
-                }
-            }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + " from: Season Episodes", "Error"); }
-            finally { loadingImage.Visible = false; }
+            //                                    //Sources
+            //                                    ((DataGridViewComboBoxCell)dataGridView.Rows[dataGridView.Rows.Count - 2].Cells[10]).Value = (long?)1;
+            //                                }
+            //                            }
+            //                        }
+            //                        i += 1;
+            //                    }
+            //                }
+            //            }
+            //            MySheet.Dispose();
+            //        }
+            //    }
+            //    catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + " from: Season Episodes", "Error"); }
+            //    finally { loadingImage.Visible = false; }
         }
 
-        private void MainTimer_Tick(object sender, EventArgs e)
+            private void MainTimer_Tick(object sender, EventArgs e)
         {
             try
             {
