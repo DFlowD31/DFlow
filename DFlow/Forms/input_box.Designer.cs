@@ -1,4 +1,4 @@
-﻿namespace DFlow
+﻿namespace LazyPortal
 {
     partial class input_box
     {
@@ -89,7 +89,7 @@
             this.Controls.Add(this.Input_Text);
             this.Controls.Add(this.Submit);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.Icon = global::DFlow.Properties.Resources.icon;
+            this.Icon = global::LazyPortal.Properties.Resources.icon;
             this.MaximizeBox = false;
             this.Name = "input_box";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;

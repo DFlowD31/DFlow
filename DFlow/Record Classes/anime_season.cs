@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DFlow
+namespace LazyPortal
 {
     public class anime_season
     {

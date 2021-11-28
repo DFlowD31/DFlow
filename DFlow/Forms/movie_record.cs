@@ -9,20 +9,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LazyPortal.services;
 
-namespace DFlow
+namespace LazyPortal
 {
     public partial class movie_record : MetroFramework.Forms.MetroForm
     {
-        private readonly database database = new database();
+        //private readonly database database = new database();
         private movie Movie = new movie();
         private bool isNew = true;
-        private Dictionary<long?, string> qualityDataSource = new Dictionary<long?, string>();
-        private Dictionary<long?, string> sourceDataSource = new Dictionary<long?, string>();
-        private Dictionary<long?, string> encoderDataSource = new Dictionary<long?, string>();
-        private Dictionary<long?, string> videoCodecDataSource = new Dictionary<long?, string>();
-        private Dictionary<long?, string> audioCodecDataSource = new Dictionary<long?, string>();
-        private Dictionary<long?, string> audioChannelDataSource = new Dictionary<long?, string>();
+        private readonly Dictionary<long?, string> qualityDataSource = new Dictionary<long?, string>();
+        private readonly Dictionary<long?, string> sourceDataSource = new Dictionary<long?, string>();
+        private readonly Dictionary<long?, string> encoderDataSource = new Dictionary<long?, string>();
+        private readonly Dictionary<long?, string> videoCodecDataSource = new Dictionary<long?, string>();
+        private readonly Dictionary<long?, string> audioCodecDataSource = new Dictionary<long?, string>();
+        private readonly Dictionary<long?, string> audioChannelDataSource = new Dictionary<long?, string>();
 
         public movie_record()
         {
@@ -92,7 +93,7 @@ namespace DFlow
                     isNew = false;
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
             finally
             {
                 loadingImage.BeginInvoke(new Action(() => { loadingImage.Visible = false; }));
@@ -105,7 +106,7 @@ namespace DFlow
             decimal number = (decimal)bytes;
             while (Math.Round(number / 1024) >= 1)
             {
-                number = number / 1024;
+                number /= 1024;
                 counter++;
             }
             return string.Format("{0:n1}{1}", number, suffixes[counter]);
@@ -141,7 +142,7 @@ namespace DFlow
                 else if ((string)torrentDownload.Tag == "blue")
                     torrentDownload.BackColor = Properties.Settings.Default.blue;
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -175,7 +176,7 @@ namespace DFlow
                 }
 
             }
-            catch (Exception ex) { saveButton.Tag = "red"; Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error"); }
+            catch (Exception ex) { saveButton.Tag = "red"; Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
             finally { setButtonColors(); }
         }
 
@@ -185,7 +186,7 @@ namespace DFlow
             {
 
             }
-            catch (Exception ex) { fromFile.Tag = "red"; Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error"); }
+            catch (Exception ex) { fromFile.Tag = "red"; Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
             finally { setButtonColors(); }
         }
 
@@ -199,7 +200,7 @@ namespace DFlow
                     { Movie.torrent = Convert.ToBase64String(File.ReadAllBytes(Open_File_Dialog.FileName)); torrentUpload.Tag = "green"; }
                 }
             }
-            catch (Exception ex) { torrentUpload.Tag = "red"; Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error"); }
+            catch (Exception ex) { torrentUpload.Tag = "red"; Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
             finally { setButtonColors(); }
         }
 
@@ -213,7 +214,7 @@ namespace DFlow
                     { File.WriteAllBytes(Save_File_Dialog.FileName, Convert.FromBase64String(Movie.torrent)); torrentDownload.Tag = "green"; }
                 }
             }
-            catch (Exception ex) { torrentDownload.Tag = "red"; Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error"); }
+            catch (Exception ex) { torrentDownload.Tag = "red"; Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
             finally { setButtonColors(); }
         }
     }

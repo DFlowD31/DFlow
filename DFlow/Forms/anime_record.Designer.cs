@@ -1,4 +1,4 @@
-﻿namespace DFlow
+﻿namespace LazyPortal
 {
     partial class anime_record
     {
@@ -113,7 +113,6 @@
             this.JPN_Name.MaxLength = 32767;
             this.JPN_Name.Name = "JPN_Name";
             this.JPN_Name.PasswordChar = '\0';
-            this.JPN_Name.PromptText = "Japanese Name";
             this.JPN_Name.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.JPN_Name.SelectedText = "";
             this.JPN_Name.SelectionLength = 0;
@@ -145,7 +144,6 @@
             this.ENG_Name.MaxLength = 32767;
             this.ENG_Name.Name = "ENG_Name";
             this.ENG_Name.PasswordChar = '\0';
-            this.ENG_Name.PromptText = "English Name";
             this.ENG_Name.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.ENG_Name.SelectedText = "";
             this.ENG_Name.SelectionLength = 0;
@@ -168,7 +166,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.loadingImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.loadingImage.Image = global::DFlow.Properties.Resources._64x64;
+            this.loadingImage.Image = global::LazyPortal.Properties.Resources._64x64;
             this.loadingImage.Location = new System.Drawing.Point(23, 63);
             this.loadingImage.Name = "loadingImage";
             this.loadingImage.Size = new System.Drawing.Size(887, 433);
@@ -191,7 +189,7 @@
             this.Controls.Add(this.ENG_Name);
             this.Controls.Add(this.loadingImage);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.Icon = global::DFlow.Properties.Resources.icon;
+            this.Icon = global::LazyPortal.Properties.Resources.icon;
             this.MaximizeBox = false;
             this.Name = "anime_record";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;

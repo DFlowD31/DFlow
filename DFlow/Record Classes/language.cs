@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DFlow
+namespace LazyPortal
 {
-    public class language
+    public class languageDB
     {
         //Columns
         public Nullable<Int64> id { get; set; } = null; //AutoIncrement

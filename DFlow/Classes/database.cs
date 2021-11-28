@@ -11,8 +11,9 @@ using System.Reflection;
 using System.Threading;
 using System.Diagnostics;
 using System.Collections;
+using LazyPortal.services;
 
-namespace DFlow
+namespace LazyPortal
 {
     //public static class DataRowExtensions
     //{
@@ -25,13 +26,13 @@ namespace DFlow
     //        return row.IsNull(1) ? default : row.Field<T>(columnIndex);
     //    }
     //}
-    class database
+    public static class database
     {
-        public readonly SQLiteConnection sqlConnection = new SQLiteConnection("Data Source=" + Application.StartupPath + @"\database\data.sqlite; New=False;");
-        private DataTable sqlDataTable;
-        private DataSet sqlDataSet;
+        public readonly static SQLiteConnection sqlConnection = new SQLiteConnection("Data Source=" + Application.StartupPath + @"\database\data.sqlite; New=False;");
+        private static DataTable sqlDataTable;
+        private static DataSet sqlDataSet;
 
-        public bool Check_Connection()
+        public static bool Check_Connection()
         {
             bool return_value = false;
             try
@@ -40,13 +41,13 @@ namespace DFlow
                 if (sqlConnection.State == ConnectionState.Open)
                     return_value = true;
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), "Error"); return_value = false; }
+            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); return_value = false; }
             finally { sqlConnection.Close(); }
             return return_value;
         }
 
         #region By String
-        public bool Insert_Data_For_Database(List<string> Parameter_Names, List<string> Parameter_Values, string Table_Name, ref int Unique_Id)
+        public static bool Insert_Data_For_Database(List<string> Parameter_Names, List<string> Parameter_Values, string Table_Name, ref int Unique_Id)
         {
             bool returnValue = false;
             try
@@ -72,12 +73,12 @@ namespace DFlow
                     Unique_Id = Convert.ToInt32(sqlCommand.ExecuteScalar());
                 returnValue = true;
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return returnValue;
         }
 
-        public string Get_From_Database(string txt)//, bool Count = false
+        public static string Get_From_Database(string txt)//, bool Count = false
         {
             string Return_Value = "";
             try
@@ -92,12 +93,12 @@ namespace DFlow
                     }
                 }
             }
-            catch (Exception ex) { Return_Value = ""; Program.Main_Form.Log(ex.ToString(), "Error"); }
+            catch (Exception ex) { Return_Value = ""; Program.Main_Form.Log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return Return_Value;
         }
 
-        public DataTable Get_Multiple_From_Database(List<string> Get_Values, string Table_Name, string Condition)
+        public static DataTable Get_Multiple_From_Database(List<string> Get_Values, string Table_Name, string Condition)
         {
             string command_text = "";
             try
@@ -111,7 +112,7 @@ namespace DFlow
                     command_text = command_text.Substring(0, command_text.LastIndexOf(","));
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
             try
             {
                 if (Condition == "``=''" || Condition == "`` LIKE '%%'" || Condition == "`` LIKE ''")
@@ -122,12 +123,12 @@ namespace DFlow
                 using (SQLiteDataAdapter sqlAdapter = new SQLiteDataAdapter(new SQLiteCommand("SELECT * FROM `movies`", sqlConnection)))
                     sqlAdapter.Fill(sqlDataTable = new DataTable());
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Open(); }
             return sqlDataTable;
         }
 
-        public bool Update_Data_For_Database_WithString(string CommandText)
+        public static bool Update_Data_For_Database_WithString(string CommandText)
         {
             bool return_value = false;
             try
@@ -137,12 +138,12 @@ namespace DFlow
                     sqlCommand.ExecuteNonQuery();
                 return_value = true;
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return return_value;
         }
 
-        public bool Delete_Record(string Condition_Name, string Condition_Value, string table_name)
+        public static bool Delete_Record(string Condition_Name, string Condition_Value, string table_name)
         {
             bool return_value = false;
             try
@@ -152,7 +153,7 @@ namespace DFlow
                     sqlCommand.ExecuteNonQuery();
                 return_value = true;
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             try
             {
@@ -164,12 +165,12 @@ namespace DFlow
                     return_value = true;
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return return_value;
         }
 
-        public void Update_table(string Table_Name, DataGridView Table)
+        public static void Update_table(string Table_Name, DataGridView Table)
         {
             try
             {
@@ -178,11 +179,11 @@ namespace DFlow
                     sqlAdapter.Fill(sqlDataTable = new DataTable());
                 Table.DataSource = new BindingSource() { DataSource = sqlDataTable };
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
         }
 
-        public List<string> Show_Table()
+        public static List<string> Show_Table()
         {
             List<string> returnValue = new List<string>();
             try
@@ -196,14 +197,14 @@ namespace DFlow
                         returnValue.Add(row[0].ToString());
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return returnValue;
         }
         #endregion
 
         #region By Object
-        public object getObjectFromDatabase<T>(object searching = null, bool getDataTable = false)
+        public static object getObjectFromDatabase<T>(object searching = null, bool getDataTable = false)
         {
             object return_value = null;
             try
@@ -261,7 +262,7 @@ namespace DFlow
                                     }
                                     the_array.Add(this_object);
                                 }
-                                catch (Exception ex) { Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error"); }
+                                catch (Exception ex) { Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
                             }
                         }
                         return_value = the_array;
@@ -270,12 +271,12 @@ namespace DFlow
                 else
                     return_value = new List<T>() { (T)Activator.CreateInstance(typeof(T)) };
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return return_value;
         }
 
-        public bool insertObjectToDatabase(object inserting, ref long insertedID)
+        public static bool insertObjectToDatabase(object inserting, ref long insertedID)
         {
             bool return_value = false;
             try
@@ -309,14 +310,14 @@ namespace DFlow
             {
                 return_value = false;
                 if (ex.Message.ToLower().Contains("unique constraint failed"))
-                    Program.Main_Form.Log(ex.Message.Substring(ex.Message.IndexOf(":") + 2) + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error");
+                    Program.Main_Form.Log(ex.Message.Substring(ex.Message.IndexOf(":") + 2) + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error);
                 else
-                    Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error");
+                    Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error);
             }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return return_value;
         }
-        public bool insertObjectToDatabase(object inserting)
+        public static bool insertObjectToDatabase(object inserting)
         {
             bool return_value = false;
             try
@@ -357,14 +358,14 @@ namespace DFlow
             {
                 return_value = false;
                 if (ex.Message.ToLower().Contains("unique constraint failed"))
-                    Program.Main_Form.Log(ex.Message.Substring(ex.Message.IndexOf(":") + 2) + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error");
+                    Program.Main_Form.Log(ex.Message.Substring(ex.Message.IndexOf(":") + 2) + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error);
                 else
-                    Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error");
+                    Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error);
             }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return return_value;
         }
-        public bool updateObjectToDatabase(object updating)
+        public static bool updateObjectToDatabase(object updating)
         {
             bool return_value = false;
             try
@@ -393,7 +394,7 @@ namespace DFlow
                         return_value = false;
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in database'" + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return return_value;
         }

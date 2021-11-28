@@ -1,4 +1,4 @@
-﻿namespace DFlow
+﻿namespace LazyPortal
 {
     using System;
     using System.Collections.Generic;
@@ -81,12 +81,12 @@
 
     public partial class ImDbMovie
     {
-        public static ImDbMovie FromJson(string json) => JsonConvert.DeserializeObject<ImDbMovie>(json, DFlow.Classes.Converter.Settings);
+        public static ImDbMovie FromJson(string json) => JsonConvert.DeserializeObject<ImDbMovie>(json, LazyPortal.Classes.Converter.Settings);
     }
 
     public static class Serialize
     {
-        public static string ToJson(this ImDbMovie self) => JsonConvert.SerializeObject(self, DFlow.Classes.Converter.Settings);
+        public static string ToJson(this ImDbMovie self) => JsonConvert.SerializeObject(self, LazyPortal.Classes.Converter.Settings);
     }
 
     internal static class Converter

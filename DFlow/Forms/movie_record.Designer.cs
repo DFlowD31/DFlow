@@ -1,4 +1,4 @@
-﻿namespace DFlow
+﻿namespace LazyPortal
 {
     partial class movie_record
     {
@@ -68,7 +68,6 @@
             this.IMDb_Text.MaxLength = 32767;
             this.IMDb_Text.Name = "IMDb_Text";
             this.IMDb_Text.PasswordChar = '\0';
-            this.IMDb_Text.PromptText = "IMDb";
             this.IMDb_Text.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.IMDb_Text.SelectedText = "";
             this.IMDb_Text.SelectionLength = 0;
@@ -100,7 +99,6 @@
             this.nameText.MaxLength = 32767;
             this.nameText.Name = "nameText";
             this.nameText.PasswordChar = '\0';
-            this.nameText.PromptText = "Movie Name";
             this.nameText.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.nameText.SelectedText = "";
             this.nameText.SelectionLength = 0;
@@ -186,7 +184,6 @@
             this.subtitleLink.MaxLength = 32767;
             this.subtitleLink.Name = "subtitleLink";
             this.subtitleLink.PasswordChar = '\0';
-            this.subtitleLink.PromptText = "Subtitle Link";
             this.subtitleLink.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.subtitleLink.SelectedText = "";
             this.subtitleLink.SelectionLength = 0;
@@ -231,7 +228,6 @@
             this.sizeText.MaxLength = 32767;
             this.sizeText.Name = "sizeText";
             this.sizeText.PasswordChar = '\0';
-            this.sizeText.PromptText = "Size";
             this.sizeText.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.sizeText.SelectedText = "";
             this.sizeText.SelectionLength = 0;
@@ -263,7 +259,6 @@
             this.typeText.MaxLength = 32767;
             this.typeText.Name = "typeText";
             this.typeText.PasswordChar = '\0';
-            this.typeText.PromptText = "Type";
             this.typeText.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.typeText.SelectedText = "";
             this.typeText.SelectionLength = 0;
@@ -334,7 +329,6 @@
             this.videoBitrateText.MaxLength = 32767;
             this.videoBitrateText.Name = "videoBitrateText";
             this.videoBitrateText.PasswordChar = '\0';
-            this.videoBitrateText.PromptText = "Video Bitrate";
             this.videoBitrateText.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.videoBitrateText.SelectedText = "";
             this.videoBitrateText.SelectionLength = 0;
@@ -353,11 +347,11 @@
             // 
             // loadingImage
             // 
-            this.loadingImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.loadingImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.loadingImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.loadingImage.Image = global::DFlow.Properties.Resources._64x64;
+            this.loadingImage.Image = global::LazyPortal.Properties.Resources._64x64;
             this.loadingImage.ImageLocation = "";
             this.loadingImage.Location = new System.Drawing.Point(23, 63);
             this.loadingImage.Name = "loadingImage";
@@ -420,7 +414,7 @@
             this.Controls.Add(this.nameText);
             this.Controls.Add(this.IMDb_Text);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.Icon = global::DFlow.Properties.Resources.icon;
+            this.Icon = global::LazyPortal.Properties.Resources.icon;
             this.MaximizeBox = false;
             this.Name = "movie_record";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;

@@ -1,4 +1,4 @@
-﻿namespace DFlow
+﻿namespace LazyPortal
 {
     partial class language_choice
     {
@@ -70,7 +70,7 @@
             this.Controls.Add(this.Japanese);
             this.Controls.Add(this.English);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.Icon = global::DFlow.Properties.Resources.icon;
+            this.Icon = global::LazyPortal.Properties.Resources.icon;
             this.MaximizeBox = false;
             this.Name = "language_choice";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;

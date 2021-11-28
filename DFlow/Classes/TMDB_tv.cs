@@ -6,7 +6,7 @@
 //
 //    var tmdbTv = TmdbTv.FromJson(jsonString);
 
-namespace DFlow.Classes
+namespace LazyPortal.Classes
 {
     using System;
     using System.Collections.Generic;
@@ -75,7 +75,7 @@ namespace DFlow.Classes
 
     public partial class TMDB_tv
     {
-        public static TMDB_tv FromJson(string json) => JsonConvert.DeserializeObject<TMDB_tv>(json, DFlow.Classes.Converter.Settings);
+        public static TMDB_tv FromJson(string json) => JsonConvert.DeserializeObject<TMDB_tv>(json, LazyPortal.Classes.Converter.Settings);
     }
 
     public class SimpleWebProxy : IWebProxy

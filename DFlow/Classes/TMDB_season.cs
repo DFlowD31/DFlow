@@ -6,7 +6,7 @@
 //
 //    var tmdbSeason = TmdbSeason.FromJson(jsonString);
 
-namespace DFlow.Classes
+namespace LazyPortal.Classes
 {
     using System;
     using System.Collections.Generic;
@@ -127,7 +127,7 @@ namespace DFlow.Classes
 
     public partial class TMDB_season
     {
-        public static TMDB_season FromJson(string json) => JsonConvert.DeserializeObject<TMDB_season>(json, DFlow.Classes.Converter.Settings);
+        public static TMDB_season FromJson(string json) => JsonConvert.DeserializeObject<TMDB_season>(json, LazyPortal.Classes.Converter.Settings);
     }
 
     internal class DepartmentConverter : JsonConverter

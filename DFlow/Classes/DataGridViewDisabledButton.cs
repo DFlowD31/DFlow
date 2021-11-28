@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
-namespace DFlow
+namespace LazyPortal
 {
     public class DataGridViewDisableButtonColumn : DataGridViewButtonColumn
     {

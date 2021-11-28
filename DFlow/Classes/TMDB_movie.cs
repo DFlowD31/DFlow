@@ -6,7 +6,7 @@
 //
 //    var tmdb = Tmdb.FromJson(jsonString);
 
-namespace DFlow.Classes
+namespace LazyPortal.Classes
 {
     using System;
     using System.Collections.Generic;
@@ -77,15 +77,15 @@ namespace DFlow.Classes
 
     public partial class TMDB_movie
     {
-        public static TMDB_movie FromJson(string json) => JsonConvert.DeserializeObject<TMDB_movie>(json, DFlow.Classes.Converter.Settings);
+        public static TMDB_movie FromJson(string json) => JsonConvert.DeserializeObject<TMDB_movie>(json, LazyPortal.Classes.Converter.Settings);
     }
 
     public static class Serialize
     {
-        public static string ToJson(this TMDB_movie self) => JsonConvert.SerializeObject(self, DFlow.Classes.Converter.Settings);
-        public static string ToJson(this TMDB_collection self) => JsonConvert.SerializeObject(self, DFlow.Classes.Converter.Settings);
-        public static string ToJson(this TMDB_tv self) => JsonConvert.SerializeObject(self, DFlow.Classes.Converter.Settings);
-        public static string ToJson(this TMDB_season self) => JsonConvert.SerializeObject(self, DFlow.Classes.Converter.Settings);
+        public static string ToJson(this TMDB_movie self) => JsonConvert.SerializeObject(self, LazyPortal.Classes.Converter.Settings);
+        public static string ToJson(this TMDB_collection self) => JsonConvert.SerializeObject(self, LazyPortal.Classes.Converter.Settings);
+        public static string ToJson(this TMDB_tv self) => JsonConvert.SerializeObject(self, LazyPortal.Classes.Converter.Settings);
+        public static string ToJson(this TMDB_season self) => JsonConvert.SerializeObject(self, LazyPortal.Classes.Converter.Settings);
     }
 
     internal static class Converter

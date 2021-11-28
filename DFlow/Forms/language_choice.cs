@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LazyPortal.services;
 
-namespace DFlow
+namespace LazyPortal
 {
     public partial class language_choice : MetroFramework.Forms.MetroForm
     {
@@ -19,14 +20,14 @@ namespace DFlow
 
         private void English_Click(object sender, EventArgs e)
         {
-            Main.chosen_language = "English";
+            choice.chosenLanguage = services.language.english;
             DialogResult = DialogResult.OK;
             Close();
         }
 
         private void Japanese_Click(object sender, EventArgs e)
         {
-            Main.chosen_language = "Japanese";
+            choice.chosenLanguage = services.language.japanese;
             DialogResult = DialogResult.OK;
             Close();
         }

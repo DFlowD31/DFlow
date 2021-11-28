@@ -6,7 +6,7 @@
 //
 //    var tmdbCollection = TmdbCollection.FromJson(jsonString);
 
-namespace DFlow.Classes
+namespace LazyPortal.Classes
 {
     using System;
     using System.Collections.Generic;
@@ -60,6 +60,6 @@ namespace DFlow.Classes
 
     public partial class TMDB_collection
     {
-        public static TMDB_collection FromJson(string json) => JsonConvert.DeserializeObject<TMDB_collection>(json, DFlow.Classes.Converter.Settings);
+        public static TMDB_collection FromJson(string json) => JsonConvert.DeserializeObject<TMDB_collection>(json, LazyPortal.Classes.Converter.Settings);
     }
 }

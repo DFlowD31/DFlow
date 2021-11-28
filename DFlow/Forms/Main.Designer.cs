@@ -1,4 +1,4 @@
-﻿namespace DFlow
+﻿namespace LazyPortal
 {
     partial class Main
     {
@@ -34,7 +34,7 @@
             this.Anime_Browse = new System.Windows.Forms.Button();
             this.Log_Panel = new System.Windows.Forms.Panel();
             this.Log_Text = new System.Windows.Forms.RichTextBox();
-            this.Poster = new System.Windows.Forms.Button();
+            this.Poster_btn = new System.Windows.Forms.Button();
             this.ProgressBar = new MetroFramework.Controls.MetroProgressBar();
             this.Mini_ProgressBar = new MetroFramework.Controls.MetroProgressBar();
             this.Destination = new MetroFramework.Controls.MetroTextBox();
@@ -51,12 +51,9 @@
             this.Exit_Button = new System.Windows.Forms.Button();
             this.Folder_Browser_Dialog = new System.Windows.Forms.FolderBrowserDialog();
             this.Date_Time_Picker = new System.Windows.Forms.DateTimePicker();
-            this.Fill_Classes = new System.ComponentModel.BackgroundWorker();
             this.loadingImage = new System.Windows.Forms.PictureBox();
             this.Open_File_Dialog = new System.Windows.Forms.OpenFileDialog();
             this.Movie_File = new System.Windows.Forms.Button();
-            this.icoFromImage = new System.ComponentModel.BackgroundWorker();
-            this.icoFromImageQueuer = new System.ComponentModel.BackgroundWorker();
             this.Log_Panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loadingImage)).BeginInit();
             this.SuspendLayout();
@@ -99,20 +96,20 @@
             this.Log_Text.TabIndex = 33;
             this.Log_Text.Text = "";
             // 
-            // Poster
+            // Poster_btn
             // 
-            this.Poster.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
-            this.Poster.FlatAppearance.BorderSize = 0;
-            this.Poster.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Poster.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.Poster.ForeColor = System.Drawing.Color.White;
-            this.Poster.Location = new System.Drawing.Point(156, 63);
-            this.Poster.Name = "Poster";
-            this.Poster.Size = new System.Drawing.Size(127, 23);
-            this.Poster.TabIndex = 51;
-            this.Poster.Text = "Poster";
-            this.Poster.UseVisualStyleBackColor = false;
-            this.Poster.Click += new System.EventHandler(this.Poster_Click);
+            this.Poster_btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
+            this.Poster_btn.FlatAppearance.BorderSize = 0;
+            this.Poster_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Poster_btn.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.Poster_btn.ForeColor = System.Drawing.Color.White;
+            this.Poster_btn.Location = new System.Drawing.Point(156, 63);
+            this.Poster_btn.Name = "Poster_btn";
+            this.Poster_btn.Size = new System.Drawing.Size(127, 23);
+            this.Poster_btn.TabIndex = 51;
+            this.Poster_btn.Text = "Poster";
+            this.Poster_btn.UseVisualStyleBackColor = false;
+            this.Poster_btn.Click += new System.EventHandler(this.Poster_Click);
             // 
             // ProgressBar
             // 
@@ -221,7 +218,6 @@
             // Merge_Background
             // 
             this.Merge_Background.WorkerSupportsCancellation = true;
-            this.Merge_Background.DoWork += new System.ComponentModel.DoWorkEventHandler(this.Merge_Background_DoWork);
             // 
             // Shutdown_Timer
             // 
@@ -316,18 +312,13 @@
             this.Date_Time_Picker.Size = new System.Drawing.Size(127, 23);
             this.Date_Time_Picker.TabIndex = 37;
             // 
-            // Fill_Classes
-            // 
-            this.Fill_Classes.DoWork += new System.ComponentModel.DoWorkEventHandler(this.Fill_Classes_DoWork);
-            this.Fill_Classes.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.Fill_Classes_RunWorkerCompleted);
-            // 
             // loadingImage
             // 
             this.loadingImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.loadingImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.loadingImage.Image = global::DFlow.Properties.Resources._64x64;
+            this.loadingImage.Image = global::LazyPortal.Properties.Resources._64x64;
             this.loadingImage.ImageLocation = "";
             this.loadingImage.Location = new System.Drawing.Point(23, 63);
             this.loadingImage.Name = "loadingImage";
@@ -352,16 +343,6 @@
             this.Movie_File.UseVisualStyleBackColor = false;
             this.Movie_File.Click += new System.EventHandler(this.Movie_File_Click);
             // 
-            // icoFromImage
-            // 
-            this.icoFromImage.DoWork += new System.ComponentModel.DoWorkEventHandler(this.icoFromImage_DoWork);
-            // 
-            // icoFromImageQueuer
-            // 
-            this.icoFromImageQueuer.WorkerReportsProgress = true;
-            this.icoFromImageQueuer.DoWork += new System.ComponentModel.DoWorkEventHandler(this.icoFromImageQueuer_DoWork);
-            this.icoFromImageQueuer.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.icoFromImageQueuer_ProgressChanged);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -373,7 +354,7 @@
             this.Controls.Add(this.Anime_Browse);
             this.Controls.Add(this.Movie_Folder);
             this.Controls.Add(this.Log_Panel);
-            this.Controls.Add(this.Poster);
+            this.Controls.Add(this.Poster_btn);
             this.Controls.Add(this.ProgressBar);
             this.Controls.Add(this.Mini_ProgressBar);
             this.Controls.Add(this.Destination);
@@ -387,11 +368,11 @@
             this.Controls.Add(this.Date_Time_Picker);
             this.Controls.Add(this.loadingImage);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.Icon = global::DFlow.Properties.Resources.icon;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Main";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "DFlow";
+            this.Text = "LazyPortal";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Log_Panel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.loadingImage)).EndInit();
@@ -404,7 +385,7 @@
         internal System.Windows.Forms.Button Anime_Browse;
         internal System.Windows.Forms.Panel Log_Panel;
         public System.Windows.Forms.RichTextBox Log_Text;
-        private System.Windows.Forms.Button Poster;
+        private System.Windows.Forms.Button Poster_btn;
         internal MetroFramework.Controls.MetroProgressBar ProgressBar;
         internal MetroFramework.Controls.MetroProgressBar Mini_ProgressBar;
         internal MetroFramework.Controls.MetroTextBox Destination;
@@ -421,12 +402,9 @@
         private System.Windows.Forms.Button Exit_Button;
         private System.Windows.Forms.FolderBrowserDialog Folder_Browser_Dialog;
         internal System.Windows.Forms.DateTimePicker Date_Time_Picker;
-        private System.ComponentModel.BackgroundWorker Fill_Classes;
         private System.Windows.Forms.PictureBox loadingImage;
         private System.Windows.Forms.OpenFileDialog Open_File_Dialog;
         private System.Windows.Forms.Button Movie_File;
-        private System.ComponentModel.BackgroundWorker icoFromImage;
-        private System.ComponentModel.BackgroundWorker icoFromImageQueuer;
     }
 }
 

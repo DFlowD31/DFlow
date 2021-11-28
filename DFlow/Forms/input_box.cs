@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LazyPortal.services;
 
-namespace DFlow
+namespace LazyPortal
 {
     public partial class input_box : MetroFramework.Forms.MetroForm
     {
@@ -19,7 +20,7 @@ namespace DFlow
 
         private void Submit_Click(object sender, EventArgs e)
         {
-            Main.inputed_text = Input_Text.Text;
+            choice.inputText = Input_Text.Text;
             DialogResult = DialogResult.OK;
             Close();
         }

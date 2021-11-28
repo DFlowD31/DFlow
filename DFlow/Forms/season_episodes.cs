@@ -11,12 +11,13 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
 using System.IO;
+using LazyPortal.services;
 
-namespace DFlow
+namespace LazyPortal
 {
     public partial class season_episodes : MetroFramework.Forms.MetroForm
     {
-        private readonly database database = new database();
+        //private readonly database database = new database();
         private readonly anime_season Season = new anime_season();
         private List<anime_episode> Episodes = new List<anime_episode>();
         //private List<quality> Qualities = new List<quality>();
@@ -39,7 +40,7 @@ namespace DFlow
                 }
                 else
                 {
-                    Season = ((List<anime_season>)new database().getObjectFromDatabase<anime_season>(new anime_season() { anime_id = anime_id, season_number = season_number }))[0];
+                    Season = ((List<anime_season>)database.getObjectFromDatabase<anime_season>(new anime_season() { anime_id = anime_id, season_number = season_number }))[0];
                     JPN_Season_Name.Text = Season.season_japanese_name;
                     ENG_Season_Name.Text = Season.season_english_name;
                     the_anime_id = anime_id;
@@ -48,7 +49,7 @@ namespace DFlow
                     getEpisodes.RunWorkerAsync();
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + "from: Season episodes main", "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + "from: Season episodes main", msgType.error); }
         }
 
         private void JPN_Season_Name_GotFocus(object sender, EventArgs e)
@@ -78,7 +79,7 @@ namespace DFlow
                 if (Open_File_Dialog.ShowDialog() == DialogResult.OK)
                 { dataGridView.ScrollBars = ScrollBars.None; getFromExcel.RunWorkerAsync(); }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
         }
 
         private void GetEpisodes_DoWork(object sender, DoWorkEventArgs e)
@@ -136,7 +137,7 @@ namespace DFlow
                     if (Convert.ToString(row.Cells[8].Value) != string.Empty || Convert.ToString(row.Cells[7].Value) != string.Empty) { ((DataGridViewDisableButtonCell)row.Cells[12]).Enabled = false; }
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + " from: hmmmmmmm", "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + " from: hmmmmmmm", msgType.error); }
             finally
             {
                 startIndex.Text = "1";
@@ -365,7 +366,7 @@ namespace DFlow
                     getEpisodes.RunWorkerAsync();
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
         }
         public void setButtonColors()
         {
@@ -414,7 +415,7 @@ namespace DFlow
                 else if ((string)downloadRange.Tag == "blue")
                     downloadRange.BackColor = Properties.Settings.Default.blue;
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + " from: Season Episodes", "Error"); }
+            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + " from: Season Episodes", msgType.error); }
         }
 
         private void DataGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)

@@ -1,4 +1,4 @@
-﻿namespace DFlow
+﻿namespace LazyPortal
 {
     partial class season_episodes
     {
@@ -106,7 +106,6 @@
             this.JPN_Season_Name.MaxLength = 32767;
             this.JPN_Season_Name.Name = "JPN_Season_Name";
             this.JPN_Season_Name.PasswordChar = '\0';
-            this.JPN_Season_Name.PromptText = "Season Japanese Name";
             this.JPN_Season_Name.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.JPN_Season_Name.SelectedText = "";
             this.JPN_Season_Name.SelectionLength = 0;
@@ -138,7 +137,6 @@
             this.ENG_Season_Name.MaxLength = 32767;
             this.ENG_Season_Name.Name = "ENG_Season_Name";
             this.ENG_Season_Name.PasswordChar = '\0';
-            this.ENG_Season_Name.PromptText = "Season English Name";
             this.ENG_Season_Name.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.ENG_Season_Name.SelectedText = "";
             this.ENG_Season_Name.SelectionLength = 0;
@@ -165,8 +163,8 @@
             this.dataGridView.AllowUserToDeleteRows = false;
             this.dataGridView.AllowUserToResizeColumns = false;
             this.dataGridView.AllowUserToResizeRows = false;
-            this.dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView.BackgroundColor = System.Drawing.Color.White;
             this.dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -223,11 +221,11 @@
             // 
             // loadingImage
             // 
-            this.loadingImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.loadingImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.loadingImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.loadingImage.Image = global::DFlow.Properties.Resources._64x64;
+            this.loadingImage.Image = global::LazyPortal.Properties.Resources._64x64;
             this.loadingImage.Location = new System.Drawing.Point(23, 63);
             this.loadingImage.Name = "loadingImage";
             this.loadingImage.Size = new System.Drawing.Size(864, 433);
@@ -350,7 +348,7 @@
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.loadingImage);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.Icon = global::DFlow.Properties.Resources.icon;
+            this.Icon = global::LazyPortal.Properties.Resources.icon;
             this.Name = "season_episodes";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Season_episodes_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Season_episodes_FormClosed);
