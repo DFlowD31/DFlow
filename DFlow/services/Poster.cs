@@ -1,18 +1,18 @@
-﻿using System;
-using System.IO;
-using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using System.Text.RegularExpressions;
-using RestSharp;
+﻿using LazyPortal.Classes;
 using Newtonsoft.Json;
-using LazyPortal.Classes;
-using System.Net;
+using RestSharp;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace LazyPortal.services
 {
@@ -108,7 +108,7 @@ namespace LazyPortal.services
 
                             Bitmap mainBitmap = null;
 
-                            if (imageInfo.Length > 0 && imageInfo.Where(f => f.Name.Contains("YTS")).Count() > 0)
+                            if (imageInfo.Length > 0 && imageInfo.Where(f => f.Name.Contains("YTS")).Count() <= 0)
                                 mainBitmap = new Bitmap(imageInfo[0].FullName);
                             else
                             {
@@ -330,6 +330,195 @@ namespace LazyPortal.services
             }
             catch (Exception e) { MessageBox.Show(e.ToString()); }
             finally { }
+        }
+
+        public static async void SetFileThumbnail()
+        {
+            await Task.Run(() => setFileThumbnail());
+        }
+
+        private static void setFileThumbnail()
+        {
+            try
+            {
+                //mediaTypes type;
+                List<FileInfo> files = new List<FileInfo>();
+                using (OpenFileDialog Open_File_Dialog = main.getOpenFileDialog())
+                {
+                    if (Open_File_Dialog == null)
+                        return;
+
+                    files.Add(new FileInfo(Open_File_Dialog.FileName));
+                    //if (new choice_box().ShowDialog() == DialogResult.OK)
+                    //{
+                    //    if (choice.series)
+                    //        type = mediaTypes.tv;
+                    //    else
+                    //        type = mediaTypes.movie;
+                    //    if (choice.container)
+                    //        directories = new DirectoryInfo(Open_File_Dialog.SelectedPath).GetDirectories().ToList();
+                    //    else
+                    //        directories.Add(new DirectoryInfo(Open_File_Dialog.SelectedPath));
+                    //}
+                    //else
+                    //    return;
+
+                    main.maxProgress(files.Count, main.ProgressBar);
+                    main.updateProgressBar(0, main.ProgressBar);
+
+                    foreach (FileInfo fileInfo in files)
+                    {
+                        Bitmap mainBitmap = null;
+
+                        string extension = fileInfo.Name.Substring(fileInfo.Name.LastIndexOf("."));
+
+                        string name = Path.GetFileNameWithoutExtension(fileInfo.Name);
+                        List<int> years = new List<int>();
+
+                        removeFromName<quality>(ref name);
+
+                        foreach (Match match in new Regex(@"\d{4}").Matches(name))
+                            years.Add(Convert.ToInt32(match.Value));
+
+                        years.Sort((a, b) => b.CompareTo(a));
+
+                        try { name = Regex.Replace(name, $@"\b{years[0]}\b", string.Empty); } catch (Exception) { }
+
+                        if (years.Count() == 0)
+                            years.Add(0);
+
+                        string folderName = name;
+
+                        name = name.Replace(".", " ");
+
+                        removeFromName<audio_codec>(ref name);
+                        removeFromName<encoder>(ref name);
+                        removeFromName<source>(ref name);
+                        removeFromName<video_codec>(ref name);
+                        //removeFromName<languageDB>(ref name);
+
+                        name = Regex.Replace(name, @"[^0-9a-zA-Z\s&一-龯ぁ-んァ-ン\w！：／・]", string.Empty);
+                        name = new Regex("[ ]{2,}", RegexOptions.None).Replace(name, " ");
+                        name = name.ToLower();
+
+                        removeFromName<audio_channel>(ref name);
+
+                        main.Log("Simplified name:= " + name, msgType.message);
+
+                        main.maxProgress(name.Count(f => (f == ' ')), main.Mini_ProgressBar);
+                        main.updateProgressBar(0, main.Mini_ProgressBar);
+
+                        while (name != string.Empty)
+                        {
+                            foreach (int year in years)
+                            {
+                                
+                                IRestResponse response = null;
+                                response = new RestClient("https://api.themoviedb.org/3/search/movie?api_key=9a49cbab6d640fd9483fbdd2abe22b94&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&year=" + year.ToString()).Execute(new RestRequest(Method.GET));
+
+                                TMDB_movie responseContent = JsonConvert.DeserializeObject<TMDB_movie>(response.Content);
+
+                                if (responseContent.TotalResults > 0)
+                                {
+                                    string closest_index = string.Empty;
+
+                                    if (responseContent.TotalResults == 1)
+                                        closest_index = "0";
+                                    else
+                                    {
+
+                                        double? most_match = 0.0;
+
+                                        foreach (TMDB_movie.Result result in responseContent.Results)
+                                        {
+                                            var title = result.OriginalTitle;
+                                            var year2 = result.ReleaseDate.ToString().Substring(0,4);
+
+                                            if (year == 0 || year.ToString() == year2)
+                                            {
+                                                //title = title.Replace(".", " ");
+                                                //title = Regex.Replace(title, @"[^0-9a-zA-Z\s&一-龯ぁ-んァ-ン\w！：／・]", string.Empty);
+                                                //title = new Regex("[ ]{2,}", RegexOptions.None).Replace(title, " ");
+
+                                                double match_case = CalculateSimilarity(title.ToLower(), name.ToLower());
+                                                main.Log(match_case.ToString(), msgType.message);
+                                                //Log(title.ToLower() + " := " + name.ToLower() + " with " + match_case.ToString(), "Msg");
+                                                if (match_case > most_match)
+                                                {
+                                                    closest_index = responseContent.Results.IndexOf(result).ToString();
+                                                    most_match = match_case;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    try
+                                    {
+                                        if (closest_index != string.Empty)
+                                        {
+                                            main.Log("https://image.tmdb.org/t/p/w500" + responseContent.Results[Convert.ToInt32(closest_index)].PosterPath, msgType.message);
+                                            mainBitmap = new Bitmap(WebRequest.Create("https://image.tmdb.org/t/p/w500" + responseContent.Results[Convert.ToInt32(closest_index)].PosterPath).GetResponse().GetResponseStream());
+                                            main.Log("Poster Found.", msgType.success);
+                                            goto posterFound;
+                                        }
+                                    }
+                                    catch (Exception) { }
+                                }
+
+                                if (name.Contains(" "))
+                                    name = name.Substring(0, name.LastIndexOf(" "));
+                                else
+                                    name = string.Empty;
+
+                                main.updateProgressBar(1, main.Mini_ProgressBar);
+                            }
+                        }
+
+                    posterFound:
+                        if (mainBitmap != null)
+                        {
+                            if (fileInfo.Extension != ".mkv")
+                            {
+
+                            }
+
+                            MessageBox.Show(fileInfo.Extension);
+                            //string merge_command = @"""" + fileInfo.FullName + @""" --delete-attachment mime-type:image/png""";
+
+                            //main.Log("Deleting all the cover attachment if any.", msgType.message);
+
+                            //Process p = Process.Start(new ProcessStartInfo() { FileName = Application.StartupPath + @"\MKVToolNix\mkvpropedit.exe", Arguments = merge_command, RedirectStandardInput = true, RedirectStandardOutput = true, UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden });
+                            //p.OutputDataReceived += new DataReceivedEventHandler(MKVToolNix.process_OutputDataReceived);
+                            //p.BeginOutputReadLine();
+                            //do
+                            //{
+                            //} while (!p.HasExited);
+                            //p.WaitForExit();
+
+                            //mainBitmap.Save(fileInfo.DirectoryName + @"\cover.png", ImageFormat.Png);
+
+                            //merge_command = @"""" + fileInfo.FullName + @""" --attachment-name cover.png --attachment-mime-type image/png --add-attachment """ + fileInfo.DirectoryName + @"\cover.png""";
+
+                            //main.Log("Adding cover to Movie --> " + fileInfo.Name + "... ", msgType.message);
+
+                            //p = Process.Start(new ProcessStartInfo() { FileName = Application.StartupPath + @"\MKVToolNix\mkvpropedit.exe", Arguments = merge_command, RedirectStandardInput = true, RedirectStandardOutput = true, UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden });
+                            //p.OutputDataReceived += new DataReceivedEventHandler(MKVToolNix.process_OutputDataReceived);
+                            //p.BeginOutputReadLine();
+                            //do
+                            //{
+                            //} while (!p.HasExited);
+                            //p.WaitForExit();
+                            //File.Delete(fileInfo.DirectoryName + @"\cover.png");
+                            main.Log("Done.", msgType.success);
+                        }
+                        else
+                            main.Log("No Posters Found.", msgType.error);
+
+                        main.updateProgressBar(main.Mini_ProgressBar.Maximum, main.Mini_ProgressBar);
+                    }
+                }
+            }
+            catch (Exception e) { MessageBox.Show(e.ToString()); }
+            finally {}
         }
 
         private static void hideFile(String path)

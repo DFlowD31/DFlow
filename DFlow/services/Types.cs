@@ -52,7 +52,7 @@ namespace LazyPortal.services
         public static string[] subtitleEXT = new string[] { ".aaf", ".asc", ".bmp", ".cap", ".cin", ".idx", ".itt", ".mcc", ".nav", ".onl", ".sami", ".sbv", ".scc", ".scr", ".smi", ".son", ".srt", ".sst", ".stl", ".sub", ".tif", ".ult", ".vtt", ".xml" };
         public static string[] videoEXT = new string[] { ".3g2", ".3gp", ".amv", ".asf", ".avi", ".drc", ".f4a", ".f4b", ".f4p ", ".f4v", ".flv", ".gif", ".gifv", ".m2ts", ".m2v", ".m4p", ".m4v", ".mkv", ".mng", ".mov", ".mp2", ".mp4", ".mpe", ".mpeg", ".mpg", ".mpv", ".mts", ".mxf", ".nsv", ".ogg", ".ogv", ".qt", ".rm", ".rmvb", ".roq", ".svi", ".ts", ".viv", ".vob", ".webm", ".wmv", ".yuv" };
         public static string[] audioEXT = new string[] { ".3gp", ".8svx", ".aa", ".aac", ".aax", ".act", ".aiff", ".alac", ".amr", ".ape", ".au", ".awb", ".cda", ".dss", ".dvf", ".flac", ".gsm", ".iklax", ".ivs", ".m4a", ".m4b", ".m4p", ".mmf", ".mogg", ".mp3", ".mpc", ".msv", ".nmf", ".oga", ".ogg", ".opus", ".ra", ".raw", ".rf64", ".rm", ".sln", ".tta", ".voc", ".vox", ".wav", ".webm", ".wma", ".wv" };
-        public static string[] imageEXT = new string[] { "jpg", "jpeg", "png", "gif", "tiff", "bmp", "svg" };
+        public static string[] imageEXT = new string[] { ".jpg", ".jpeg", ".png", ".gif", ".tiff", ".bmp", ".svg" };
     }
 
     public static class choice

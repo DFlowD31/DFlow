@@ -187,6 +187,19 @@ namespace LazyPortal
             }
         }
 
+        public OpenFileDialog getOpenFileDialog()
+        {
+            if (InvokeRequired)
+                return (OpenFileDialog)Invoke(new Func<OpenFileDialog>(() => getOpenFileDialog()));
+            else
+            {
+                if (Open_File_Dialog.ShowDialog() == DialogResult.OK)
+                    return Open_File_Dialog;
+                else
+                    return null;
+            }
+        }
+
         #endregion
 
         private void Timer_Button_Click(object sender, EventArgs e)
@@ -243,7 +256,7 @@ namespace LazyPortal
         {
             try
             {
-                checkTMDB();
+                Poster.SetFileThumbnail();
                 //if (Open_File_Dialog.ShowDialog() == DialogResult.OK) {
                 //    var fileName = Open_File_Dialog.SafeFileName;
                 //    var filePath = Open_File_Dialog.FileName;

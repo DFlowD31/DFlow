@@ -1,0 +1,11 @@
+MKV Merge
+"D:\Projects\DFlow\DFlow\bin\Debug\MKVToolNix\/c mkvmerge.exe" --ui-language en --output ^"D:\MKV Convertions\Alls Well Ends Well (1992) [1080p] [BluRay] [5.1] [YTS.MX].mkv^" --language 0:und --language 1:und ^"^(^" ^"D:\Torrent Downloads\container\Alls Well Ends Well (1992) [1080p] [BluRay] [5.1] [YTS.MX]\Alls.Well.Ends.Well.1992.1080p.BluRay.x264.AAC5.1-[YTS.MX].mp4^" ^"^)^" --language 0:en --default-track 0:yes --forces-track 0:yes ^"^(^" ^"D:\Torrent Downloads\container\Alls Well Ends Well (1992) [1080p] [BluRay] [5.1] [YTS.MX]\Alls.Well.Ends.Well.1992.1080p.BluRay.x264.AAC5.1-[YTS.MX].srt ^" ^"^)^" --track-order 0:0,0:1,1:0
+"D:\Projects\DFlow\DFlow\bin\Debug\MKVToolNix\/c mkvmerge.exe" --ui-language en --output ^"D:\MKV Convertions\Alls.Well.Ends.Well.1992.1080p.BluRay.x264.AAC5.1-[YTS.MX].mkv^" --language 0:und --language 1:und ^"^(^" ^"D:\Torrent Downloads\container\Alls Well Ends Well ^(1992^) [1080p] [BluRay] [5.1] [YTS.MX]\Alls.Well.Ends.Well.1992.1080p.BluRay.x264.AAC5.1-[YTS.MX].mp4^" ^"^)^" --language 0:en --forced-track 0:yes ^"^(^" ^"D:\Torrent Downloads\container\Alls Well Ends Well ^(1992^) [1080p] [BluRay] [5.1] [YTS.MX]\Alls.Well.Ends.Well.1992.1080p.BluRay.x264.AAC5.1-[YTS.MX].srt^" ^"^)^" --track-order 0:0,0:1,1:0
+
+MKV set thumbnail
+"C:\Program Files\MKVToolNix\mkvmerge.exe" --ui-language en --output ^"D:\MKV Convertions\Wing Chun ^(1^).mkv^" --language 0:und --display-dimensions 0:1028x576 --language 1:zh --language 2:en --sub-charset 3:UTF-8 --language 3:en --track-name ^"3:English Subtitle^" ^"^(^" ^"E:\Chinese\Wing Chun.mkv^" ^"^)^" --attachment-name Thumbnail.png --attachment-mime-type image/png --attach-file ^"E:\Chinese\Thumbnail.png^" --track-order 0:0,0:1,0:2,0:3
+
+mkvpropedit [options] {source-filename} {actions}
+"C:\Program Files\MKVToolNix\mkvpropedit.exe" --attachment-name Thumbnail.png --attachment-mime-type image/png
+
+@"""" + Application.StartupPath + @"\MKVToolNix\/k mkvpropedit.exe  ^""" + Properties.Settings.Default.merge_destination + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + @""" --attachment-name Thumbnail.png --attachment-mime-type image/png"
