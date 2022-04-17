@@ -100,7 +100,7 @@ namespace LazyPortal.services
                     {
                         if (Path.GetFileNameWithoutExtension(directory.Name).ToLower() != "tv")
                         {
-                            FileInfo[] imageInfo = directory.GetFiles("*.*", SearchOption.AllDirectories).Where(f => extension.imageEXT.Contains(f.Extension.ToLower())).ToArray();
+                            FileInfo[] imageInfo = directory.GetFiles("*.*", SearchOption.TopDirectoryOnly).Where(f => extension.imageEXT.Contains(f.Extension.ToLower())).ToArray();
                             string iniPath = directory.FullName + @"\desktop.ini";
                             string icoPath = directory.FullName + @"\folder.ico";
                             if (File.Exists(icoPath)) File.Delete(icoPath);
