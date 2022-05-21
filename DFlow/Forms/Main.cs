@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
@@ -6,6 +7,13 @@ using System.Windows.Forms;
 using RestSharp;
 using LazyPortal.Classes;
 using LazyPortal.services;
+using System.Text.RegularExpressions;
+using System.Threading;
+using Matroska;
+using TraktNet;
+using System.Net.Http;
+using TraktNet.Responses;
+using TraktNet.Objects.Get.Shows;
 
 namespace LazyPortal
 {
@@ -17,28 +25,33 @@ namespace LazyPortal
         public Main()
         {
             InitializeComponent();
+            if (!Directory.Exists(Properties.Settings.Default.merge_destination))
+                Directory.CreateDirectory(Properties.Settings.Default.merge_destination);
             Destination.Text = Properties.Settings.Default.merge_destination;
+
             if (database.Check_Connection())
-                Log("Connection successful...", msgType.success, true, true, false);
+                log("Connection successful...", msgType.success, true, true, false);
             else
-                Log("Connection unsuccessful...", msgType.error, true, true, false);
-            checkTMDB();
+                log("Connection unsuccessful...", msgType.error, true, true, false);
+            check_TMDB();
+
+            
         }
 
-        private void checkTMDB()
+        private void check_TMDB()
         {
             Task.Run(() =>
             {
                 if (new RestClient("https://api.themoviedb.org/3/authentication/token/new?api_key=9a49cbab6d640fd9483fbdd2abe22b94") { Proxy = SimpleWebProxy.Default }.Execute(new RestRequest(Method.GET)) != null)
-                    Log("TMDB connection successful...", msgType.success);
+                    log("TMDB connection successful...", msgType.success);
                 else
-                    Log("TMDB connection unsuccessful...", msgType.error);
+                    log("TMDB connection unsuccessful...", msgType.error);
             });
         }
 
         #region InvokeMethods
 
-        public void changeStatus(string text, uint type)
+        public void change_status(string text, uint type)
         {
             if (InvokeRequired)
             {
@@ -57,30 +70,30 @@ namespace LazyPortal
             }
         }
 
-        public Control getCtlByName(string name)
+        public Control get_control_by_name(string name)
         {
             if (InvokeRequired)
-                return (Control)Invoke(new Func<Control>(() => getCtlByName(name)));
+                return (Control)Invoke(new Func<Control>(() => get_control_by_name(name)));
             else
                 return Controls.Find(name, true)[0];
         }
 
-        public void enableMain(bool status)
+        public void enable_main(bool status)
         {
             if (InvokeRequired)
             {
-                Action safeAction = delegate { enableMain(status); };
+                Action safeAction = delegate { enable_main(status); };
                 Invoke(safeAction);
             }
             else
                 Enabled = status;
         }
 
-        public void changeButtonText(string text, Control ctl, uint type = 0x00000000)
+        public void change_button_text(string text, Control ctl, uint type = 0x00000000)
         {
             if (InvokeRequired)
             {
-                Action safeAction = delegate { changeButtonText(text, ctl, type); };
+                Action safeAction = delegate { change_button_text(text, ctl, type); };
                 ctl.Invoke(safeAction);
             }
             else
@@ -91,42 +104,38 @@ namespace LazyPortal
             }
         }
 
-        public void Log(string str, uint Type, bool no_line = false, bool first_msg = false, bool InvokeRequired = true)
+        public void log(string str, uint Type, bool no_line = false, bool first_msg = false, bool InvokeRequired = true)
         {
             try
             {
                 if (InvokeRequired)
                 {
-                    Log_Text.BeginInvoke(new Action(() =>
+                    log_richtextbox.BeginInvoke(new Action(() =>
                     {
-                        //try
-                        //{
                         if (!no_line && !first_msg)
-                            Log_Text.AppendText(Environment.NewLine);
-                        Log_Text.AppendText(str);
+                            log_richtextbox.AppendText(Environment.NewLine);
+                        log_richtextbox.AppendText(str);
                         if (str.Split('\n').Length > 1)
-                            Log_Text.Select(Log_Text.TextLength - str.Length + str.Split('\n').Length - 1, str.Length + str.Split('\n').Length);
+                            log_richtextbox.Select(log_richtextbox.TextLength - str.Length + str.Split('\n').Length - 1, str.Length + str.Split('\n').Length);
                         else
-                            Log_Text.Select(Log_Text.TextLength - str.Length, str.Length);
+                            log_richtextbox.Select(log_richtextbox.TextLength - str.Length, str.Length);
 
-                        Log_Text.SelectionColor = Color.FromArgb((int)Type);
-                        Log_Text.ScrollToCaret();
-                        //}
-                        //catch (Exception e) { MessageBox.Show(e.ToString()); }
+                        log_richtextbox.SelectionColor = Color.FromArgb((int)Type);
+                        log_richtextbox.ScrollToCaret();
                     }));
                 }
                 else
                 {
                     if (!no_line && !first_msg)
-                        Log_Text.AppendText(Environment.NewLine);
-                    Log_Text.AppendText(str);
+                        log_richtextbox.AppendText(Environment.NewLine);
+                    log_richtextbox.AppendText(str);
                     if (str.Split('\n').Length > 1)
-                        Log_Text.Select(Log_Text.TextLength - str.Length + str.Split('\n').Length - 1, str.Length + str.Split('\n').Length);
+                        log_richtextbox.Select(log_richtextbox.TextLength - str.Length + str.Split('\n').Length - 1, str.Length + str.Split('\n').Length);
                     else
-                        Log_Text.Select(Log_Text.TextLength - str.Length, str.Length);
+                        log_richtextbox.Select(log_richtextbox.TextLength - str.Length, str.Length);
 
-                    Log_Text.SelectionColor = Color.FromArgb((int)Type);
-                    Log_Text.ScrollToCaret();
+                    log_richtextbox.SelectionColor = Color.FromArgb((int)Type);
+                    log_richtextbox.ScrollToCaret();
                 }
             }
             catch (Exception e) { MessageBox.Show(e.ToString()); }
@@ -134,38 +143,38 @@ namespace LazyPortal
 
         #region ProgressBar
 
-        public int getProgressBarValue(ProgressBar pBar)
+        public int get_progressbar_value(ProgressBar pBar)
         {
             if (InvokeRequired)
-                return (int)Invoke(new Func<int>(() => getProgressBarValue(pBar)));
+                return (int)Invoke(new Func<int>(() => get_progressbar_value(pBar)));
             else
                 return pBar.Value;
         }
-        public void updateProgressBar(int progress, ProgressBar pBar)
+        public void update_progressbar(int progress, ProgressBar pBar)
         {
             if (InvokeRequired)
             {
-                Action safeAction = delegate { updateProgressBar(progress, pBar); };
+                Action safeAction = delegate { update_progressbar(progress, pBar); };
                 pBar.Invoke(safeAction);
             }
             else
                 pBar.Value = progress;
         }
-        public void incrementProgressBar(int progress, ProgressBar pBar)
+        public void increment_progressbar(int progress, ProgressBar pBar)
         {
             if (InvokeRequired)
             {
-                Action safeAction = delegate { incrementProgressBar(progress, pBar); };
+                Action safeAction = delegate { increment_progressbar(progress, pBar); };
                 pBar.Invoke(safeAction);
             }
             else
                 pBar.Value += progress;
         }
-        public void maxProgress(int maxValue, ProgressBar pBar)
+        public void max_progressbar(int maxValue, ProgressBar pBar)
         {
             if (InvokeRequired)
             {
-                Action safeAction = delegate { maxProgress(maxValue, pBar); };
+                Action safeAction = delegate { max_progressbar(maxValue, pBar); };
                 pBar.Invoke(safeAction);
             }
             else
@@ -174,10 +183,10 @@ namespace LazyPortal
 
         #endregion
 
-        public FolderBrowserDialog getFolderBrowserDialog()
+        public FolderBrowserDialog get_folderbrowserdialog()
         {
             if (InvokeRequired)
-                return (FolderBrowserDialog)Invoke(new Func<FolderBrowserDialog>(() => getFolderBrowserDialog()));
+                return (FolderBrowserDialog)Invoke(new Func<FolderBrowserDialog>(() => get_folderbrowserdialog()));
             else
             {
                 if (Folder_Browser_Dialog.ShowDialog() == DialogResult.OK)
@@ -187,10 +196,10 @@ namespace LazyPortal
             }
         }
 
-        public OpenFileDialog getOpenFileDialog()
+        public OpenFileDialog get_openfiledialog()
         {
             if (InvokeRequired)
-                return (OpenFileDialog)Invoke(new Func<OpenFileDialog>(() => getOpenFileDialog()));
+                return (OpenFileDialog)Invoke(new Func<OpenFileDialog>(() => get_openfiledialog()));
             else
             {
                 if (Open_File_Dialog.ShowDialog() == DialogResult.OK)
@@ -202,21 +211,27 @@ namespace LazyPortal
 
         #endregion
 
-        private void Timer_Button_Click(object sender, EventArgs e)
+        private void timer_btn_Click(object sender, EventArgs e)
         {
-            Shutdown_Timer.Enabled = !Shutdown_Timer.Enabled;
-            if (!Shutdown_Timer.Enabled)
-                Log("Timer Started...", msgType.message);
+            main_timer.Enabled = !main_timer.Enabled;
+            if (main_timer.Enabled)
+            {
+                timer_btn.Text = "Stop";
+                log("Timer Started...", msgType.message);
+            }
             else
-                Log("Timer Stopped...", msgType.message);
+            {
+                timer_btn.Text = "Start";
+                log("Timer Stopped...", msgType.message);
+            }
         }
 
-        private void Exit_Button_Click(object sender, EventArgs e)
+        private void exit_btn_Click(object sender, EventArgs e)
         {
             Application.ExitThread();
         }
 
-        private void Browse_Button_Click(object sender, EventArgs e)
+        private void merge_destination_browse_btn_Click(object sender, EventArgs e)
         {
             if (Folder_Browser_Dialog.ShowDialog() == DialogResult.OK)
             {
@@ -225,13 +240,12 @@ namespace LazyPortal
             }
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void main_timer_Tick(object sender, EventArgs e)
         {
-            if (Date_Time_Picker.Value <= DateTime.Now)
-            {
-                Shutdown_Timer.Enabled = false;
-                Process.Start("shutdown", "/s /t 0");
-            }
+            if (!poster_background_worker.IsBusy)
+                poster_background_worker.RunWorkerAsync();
+                
+
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -245,63 +259,31 @@ namespace LazyPortal
             Show();
         }
 
-        private void Movie_Folder_Click(object sender, EventArgs e)
-        {
-            if (new choice_box().ShowDialog() == DialogResult.OK)
-            {
-                MessageBox.Show(choice.series.ToString());
-            }
-        }
-        private void Movie_File_Click(object sender, EventArgs e)
+        private void new_function_test_btn_Click(object sender, EventArgs e)
         {
             try
             {
-                Poster.SetFileThumbnail();
-                //if (Open_File_Dialog.ShowDialog() == DialogResult.OK) {
-                //    var fileName = Open_File_Dialog.SafeFileName;
-                //    var filePath = Open_File_Dialog.FileName;
+                // Both Client ID and Client Secret are required, if you need to authenticate your application
+                var client = new TraktClient("ffbabf875e565204c86c845286e60cee44385da8ff211f57812ced74e2d2e198", "20445df61023171ba5a55e357a8d0fc7b23a7b1c72e181c6ad0c7963b2b986d1");
 
-                //    if (fileName.Substring(fileName.LastIndexOf(".") + 1) == "mkv") {
+                if (client.IsValidForUseWithAuthorization)
+                    log("TraktTV connection successful", msgType.success);
+                else
+                    log("TraktTV connection unsuccessful", msgType.error);
 
-                //        var file = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-
-                //        var doc = MatroskaSerializer.Deserialize(file);
-
-                //        if (doc.Segment.Attachments != null)
-                //        {
-                //            MessageBox.Show("Has attachment.");
-                //        }
-                //        else {
-                //            MessageBox.Show("No attachment");
-                //        }
-                //        //var file = new FileStream("propedit.bat", FileMode.CreateNew, FileAccess.ReadWrite);
-
-                //        //file.Write(@"""C:\Program Files\MKVToolnix\mkvpropedit.exe""");
-                //    }
-                //}
-                //var file = new FileStream(@"D:\Torrent Downloads\Tom and Jerry (2021)  [1080p x265 10bit S81 Joy].mkv", FileMode.Open, FileAccess.Read);
-                //var doc = MatroskaSerializer.Deserialize(file);
-
-                ////MessageBox.Show(doc.Segment.Tracks.TrackEntries.ToString());
-                //foreach (var track in doc.Segment.Tracks.TrackEntries) {
-                //    if (track.TrackType == 17)
-                //    {
-                //        //Log(track.LanguageIETF.ToString(), "Message");
-                //    }
-                //    else if (track.TrackType == 1) {
-                //        Log(track.Video.DisplayWidth + ":" + track.Video.DisplayHeight, "Message");
-                //    }
-                //    if (track.AttachmentLink.HasValue) {
-                //        Log(track.AttachmentLink.Value.ToString(), "Message");
-                //    }
-                //}
-
-                //@"""C:\Program Files\MKVToolNix\mkvmerge.exe"" --ui-language en --output ^""D:\MKV Convertions\Tom and Jerry (2021) [1080p x265 10bit S81 Joy].mkv^"" --language 0:und --display-dimensions 0:1920x1040 --language 1:en
-
-                //Log(doc.Segment.Tracks.TrackEntries[0].Name.ToString(), "Message");
-                //MessageBox.Show("Done");
+                
             }
-            catch (Exception ex) { Log(ex.ToString(), msgType.error); }
+            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
+
+
+            //if (new choice_box().ShowDialog() == DialogResult.OK)
+            //{
+            //    MessageBox.Show(choice.series.ToString());
+            //}
+        }
+        private void movie_file_poster_btn_Click(object sender, EventArgs e)
+        {
+            Poster.SetFileThumbnail();
         }
 
         private void Merge_Button_Click(object sender, EventArgs e)
@@ -312,24 +294,91 @@ namespace LazyPortal
                 MKVToolNix.cancellationPending = true;
         }
 
-        private void Poster_Click(object sender, EventArgs e)
+        private void movie_folder_poster_btn_Click(object sender, EventArgs e)
         {
             Poster.SetPoster();
         }
 
-        private void Anime_Browse_Click(object sender, EventArgs e)
+        private void anime_browse_btn_Click(object sender, EventArgs e)
         {
             new anime_record().Show();
         }
 
-        private void Music_Button_Click(object sender, EventArgs e)
+        private void music_rename_btn_Click(object sender, EventArgs e)
         {
             Naming.RenameMusic();
         }
 
-        private void Anime_Button_Click(object sender, EventArgs e)
+        private void anime_rename_btn_Click(object sender, EventArgs e)
         {
             Naming.RenameAnime();
+        }
+
+        private void main_timer_background_worker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                DirectoryInfo torrent_download_folder = new DirectoryInfo(@"D:\Torrent Downloads");
+
+                foreach (DirectoryInfo sub_directories in torrent_download_folder.GetDirectories())
+                {
+                    switch (sub_directories.Name.ToLower())
+                    {
+                        case "new folder":
+                            log(@"Folder name was ""New Folder""", msgType.message);
+                            break;
+                        case var folder_name when new Regex(@"(s\d+e\d+)|(\s+第\d+話)").IsMatch(folder_name):
+                            log(folder_name + " is for season episode", msgType.message);
+                            break;
+                        default:
+                            if (sub_directories.GetFiles("folder.ico").Length == 0)
+                            {
+                                log(sub_directories.Name + " does not have a thumbnail.", msgType.message);
+                                
+                                Task set_poster_task;
+
+                                switch (sub_directories.Name.ToLower())
+                                {
+                                    case var folder_name when new Regex(@"(\s+season\s+)|(\s+s\d+)").IsMatch(folder_name):
+                                        set_poster_task = Task.Run(() => Poster.SetPoster(sub_directories.FullName, mediaTypes.tv));
+                                        break;
+                                    default:
+                                        set_poster_task = Task.Run(() => Poster.SetPoster(sub_directories.FullName, mediaTypes.movie));
+                                        break;
+                                }
+
+                                set_poster_task.Wait();
+                            }
+                            break;
+                    }
+                }
+
+                Task set_thumbnail_task;
+                foreach (FileInfo files in torrent_download_folder.GetFiles())
+                {
+                    switch (files.Extension)
+                    {
+                        
+                        case ".mkv":
+                            if (MatroskaSerializer.Deserialize(new FileStream(files.FullName, FileMode.Open, FileAccess.Read)).Segment.Attachments.AttachedFiles.Find(x => (x.FileMimeType == "image/png" || x.FileMimeType == "image/jpg") && x.FileName.Contains("cover")) == null)
+                            {
+                                log(@"Thumbnailing """ + files.Name + @"""", msgType.message);
+                                set_thumbnail_task = Task.Run(() => Poster.SetFileThumbnail(files.FullName));
+                                set_thumbnail_task.Wait();
+                            }
+                            break;
+                        case ".mp4":
+                            log(@"Need to muxe """ + files.Name + @"""", msgType.message);
+                            set_thumbnail_task = Task.Run(() => Poster.SetFileThumbnail(files.FullName));
+                            set_thumbnail_task.Wait();
+                            break;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
         }
     }
 }

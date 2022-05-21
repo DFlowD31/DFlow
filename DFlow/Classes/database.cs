@@ -41,7 +41,7 @@ namespace LazyPortal
                 if (sqlConnection.State == ConnectionState.Open)
                     return_value = true;
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); return_value = false; }
+            catch (Exception ex) { Program.Main_Form.log(ex.ToString(), msgType.error); return_value = false; }
             finally { sqlConnection.Close(); }
             return return_value;
         }
@@ -73,7 +73,7 @@ namespace LazyPortal
                     Unique_Id = Convert.ToInt32(sqlCommand.ExecuteScalar());
                 returnValue = true;
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return returnValue;
         }
@@ -93,7 +93,7 @@ namespace LazyPortal
                     }
                 }
             }
-            catch (Exception ex) { Return_Value = ""; Program.Main_Form.Log(ex.ToString(), msgType.error); }
+            catch (Exception ex) { Return_Value = ""; Program.Main_Form.log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return Return_Value;
         }
@@ -112,7 +112,7 @@ namespace LazyPortal
                     command_text = command_text.Substring(0, command_text.LastIndexOf(","));
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.ToString(), msgType.error); }
             try
             {
                 if (Condition == "``=''" || Condition == "`` LIKE '%%'" || Condition == "`` LIKE ''")
@@ -123,7 +123,7 @@ namespace LazyPortal
                 using (SQLiteDataAdapter sqlAdapter = new SQLiteDataAdapter(new SQLiteCommand("SELECT * FROM `movies`", sqlConnection)))
                     sqlAdapter.Fill(sqlDataTable = new DataTable());
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Open(); }
             return sqlDataTable;
         }
@@ -138,7 +138,7 @@ namespace LazyPortal
                     sqlCommand.ExecuteNonQuery();
                 return_value = true;
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return return_value;
         }
@@ -153,7 +153,7 @@ namespace LazyPortal
                     sqlCommand.ExecuteNonQuery();
                 return_value = true;
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             try
             {
@@ -165,7 +165,7 @@ namespace LazyPortal
                     return_value = true;
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return return_value;
         }
@@ -179,7 +179,7 @@ namespace LazyPortal
                     sqlAdapter.Fill(sqlDataTable = new DataTable());
                 Table.DataSource = new BindingSource() { DataSource = sqlDataTable };
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
         }
 
@@ -197,7 +197,7 @@ namespace LazyPortal
                         returnValue.Add(row[0].ToString());
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.ToString(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.ToString(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return returnValue;
         }
@@ -262,7 +262,7 @@ namespace LazyPortal
                                     }
                                     the_array.Add(this_object);
                                 }
-                                catch (Exception ex) { Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+                                catch (Exception ex) { Program.Main_Form.log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
                             }
                         }
                         return_value = the_array;
@@ -271,7 +271,7 @@ namespace LazyPortal
                 else
                     return_value = new List<T>() { (T)Activator.CreateInstance(typeof(T)) };
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return return_value;
         }
@@ -310,9 +310,9 @@ namespace LazyPortal
             {
                 return_value = false;
                 if (ex.Message.ToLower().Contains("unique constraint failed"))
-                    Program.Main_Form.Log(ex.Message.Substring(ex.Message.IndexOf(":") + 2) + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error);
+                    Program.Main_Form.log(ex.Message.Substring(ex.Message.IndexOf(":") + 2) + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error);
                 else
-                    Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error);
+                    Program.Main_Form.log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error);
             }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return return_value;
@@ -358,9 +358,9 @@ namespace LazyPortal
             {
                 return_value = false;
                 if (ex.Message.ToLower().Contains("unique constraint failed"))
-                    Program.Main_Form.Log(ex.Message.Substring(ex.Message.IndexOf(":") + 2) + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error);
+                    Program.Main_Form.log(ex.Message.Substring(ex.Message.IndexOf(":") + 2) + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error);
                 else
-                    Program.Main_Form.Log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error);
+                    Program.Main_Form.log(ex.Message + " at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error);
             }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return return_value;
@@ -394,7 +394,7 @@ namespace LazyPortal
                         return_value = false;
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in database'" + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in database'" + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
             finally { if (sqlConnection.State == ConnectionState.Open) sqlConnection.Close(); }
             return return_value;
         }

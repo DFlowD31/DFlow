@@ -49,7 +49,7 @@ namespace LazyPortal
                     getEpisodes.RunWorkerAsync();
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + "from: Season episodes main", msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + "from: Season episodes main", msgType.error); }
         }
 
         private void JPN_Season_Name_GotFocus(object sender, EventArgs e)
@@ -79,7 +79,7 @@ namespace LazyPortal
                 if (Open_File_Dialog.ShowDialog() == DialogResult.OK)
                 { dataGridView.ScrollBars = ScrollBars.None; getFromExcel.RunWorkerAsync(); }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
         }
 
         private void GetEpisodes_DoWork(object sender, DoWorkEventArgs e)
@@ -137,7 +137,7 @@ namespace LazyPortal
                     if (Convert.ToString(row.Cells[8].Value) != string.Empty || Convert.ToString(row.Cells[7].Value) != string.Empty) { ((DataGridViewDisableButtonCell)row.Cells[12]).Enabled = false; }
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + " from: hmmmmmmm", msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + " from: hmmmmmmm", msgType.error); }
             finally
             {
                 startIndex.Text = "1";
@@ -366,7 +366,7 @@ namespace LazyPortal
                     getEpisodes.RunWorkerAsync();
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
         }
         public void setButtonColors()
         {
@@ -415,7 +415,7 @@ namespace LazyPortal
                 else if ((string)downloadRange.Tag == "blue")
                     downloadRange.BackColor = Properties.Settings.Default.blue;
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + " from: Season Episodes", msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber() + " from: Season Episodes", msgType.error); }
         }
 
         private void DataGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)

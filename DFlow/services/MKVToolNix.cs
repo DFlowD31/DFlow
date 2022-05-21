@@ -15,7 +15,7 @@ namespace LazyPortal.services
     {
         private static readonly Main main = Program.Main_Form;
         public static bool cancellationPending = false;
-        private static int currentIndex = 0;
+        public static int currentIndex = 0;
         public static bool mergeInProgress = false;
         #region Merge Movies
 
@@ -29,7 +29,7 @@ namespace LazyPortal.services
             string statusText = "All Done";
             try
             {
-                using (FolderBrowserDialog Folder_Browser_Dialog = main.getFolderBrowserDialog())
+                using (FolderBrowserDialog Folder_Browser_Dialog = main.get_folderbrowserdialog())
                 {
                     if (Folder_Browser_Dialog == null)
                         return;
@@ -38,7 +38,7 @@ namespace LazyPortal.services
                     List<string> commands_report = new List<string>();
                     if (new choice_box().ShowDialog() == DialogResult.OK)
                     {
-                        main.changeButtonText("Stop Merging", main.getCtlByName("Merge_Button"), msgType.error);
+                        main.change_button_text("Stop Merging", main.get_control_by_name("Merge_Button"), msgType.error);
                         if (choice.series)
                         {
 
@@ -52,7 +52,7 @@ namespace LazyPortal.services
                                 else
                                     commands_report.Add("Subtitle File Not Found.");
                                 Merging_Movies.Add(Path.GetFileNameWithoutExtension(fInfo.Name));
-                                main.Log(@"""" + Application.StartupPath + @"\MKVToolNix\/k mkvmerge.exe --ui-language en --output ^""" + Properties.Settings.Default.merge_destination + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + @".mkv^"" --language 0:und --language 1:und ^""^(^"" ^""" + fInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + "" + fInfo.Extension + @"^"" ^""^)^"" --language 0:en --track-name ^""0:English Subtitle ^"" --default-track 0:yes --forced-track 0:yes ^""^(^"" ^""" + fInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + @".srt ^"" ^""^)^"" --track-order 0:0,0:1,1:0", msgType.message);
+                                main.log(@"""" + Application.StartupPath + @"\MKVToolNix\/k mkvmerge.exe --ui-language en --output ^""" + Properties.Settings.Default.merge_destination + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + @".mkv^"" --language 0:und --language 1:und ^""^(^"" ^""" + fInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + "" + fInfo.Extension + @"^"" ^""^)^"" --language 0:en --track-name ^""0:English Subtitle ^"" --default-track 0:yes --forced-track 0:yes ^""^(^"" ^""" + fInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + @".srt ^"" ^""^)^"" --track-order 0:0,0:1,1:0", msgType.message);
                             }
                         }
                         else
@@ -105,14 +105,14 @@ namespace LazyPortal.services
                             }
                         }
 
-                        main.maxProgress(commands.Count * 100, main.ProgressBar);
-                        main.maxProgress(100, main.Mini_ProgressBar);
+                        main.max_progressbar(commands.Count * 100, main.ProgressBar);
+                        main.max_progressbar(100, main.Mini_ProgressBar);
 
                         mergeInProgress = true;
                         foreach (string merge_command in commands)
                         {
-                            main.Log("Multiplexing Movie --> " + Merging_Movies[commands.IndexOf(merge_command)] + "... ", msgType.message);
-                            main.changeStatus("Merging " + (currentIndex + 1) + " of " + commands.Count, msgType.message);
+                            main.log("Multiplexing Movie --> " + Merging_Movies[commands.IndexOf(merge_command)] + "... ", msgType.message);
+                            main.change_status("Merging " + (currentIndex + 1) + " of " + commands.Count, msgType.message);
 
                             Process p = Process.Start(new ProcessStartInfo() { FileName = "cmd.exe", Arguments = merge_command, RedirectStandardInput = true, RedirectStandardOutput = true, UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden });
                             p.OutputDataReceived += new DataReceivedEventHandler(process_OutputDataReceived);
@@ -129,7 +129,7 @@ namespace LazyPortal.services
                                         p.Kill();
                                         p.Close();
                                         statusText = "Canceled by user.";
-                                        main.Log("Canceled", msgType.error, true);
+                                        main.log("Canceled", msgType.error, true);
                                         goto Finish;
                                     }
                                 }
@@ -139,9 +139,9 @@ namespace LazyPortal.services
                             currentIndex += 1;
 
                             if (commands_report[commands.IndexOf(merge_command)] == "Done.")
-                                main.Log(commands_report[commands.IndexOf(merge_command)], msgType.success, true);
+                                main.log(commands_report[commands.IndexOf(merge_command)], msgType.success, true);
                             else
-                                main.Log(commands_report[commands.IndexOf(merge_command)], msgType.error, true);
+                                main.log(commands_report[commands.IndexOf(merge_command)], msgType.error, true);
                         }
                     }
                 }
@@ -149,19 +149,19 @@ namespace LazyPortal.services
             }
             catch (Exception ex)
             {
-                main.Log(ex.ToString(), msgType.error);
+                main.log(ex.ToString(), msgType.error);
                 statusText = "Error";
             }
             finally
             {
-                main.updateProgressBar(0, main.ProgressBar);
-                main.updateProgressBar(0, main.Mini_ProgressBar);
+                main.update_progressbar(0, main.ProgressBar);
+                main.update_progressbar(0, main.Mini_ProgressBar);
                 if (statusText == "Error")
-                    main.changeStatus(statusText, msgType.error);
+                    main.change_status(statusText, msgType.error);
                 else
-                    main.changeStatus(statusText, msgType.success);
+                    main.change_status(statusText, msgType.success);
                 mergeInProgress = false;
-                main.changeButtonText("Merge Movies", main.getCtlByName("Merge_Button"), msgType.baseColor);
+                main.change_button_text("Merge Movies", main.get_control_by_name("Merge_Button"), msgType.baseColor);
             }
         }
 
@@ -172,8 +172,8 @@ namespace LazyPortal.services
                 if (e.Data.Contains("Progress"))
                 {
                     int n = Convert.ToInt32(e.Data.Substring(e.Data.LastIndexOf("Progress") + 9).Replace("%", string.Empty));
-                    main.updateProgressBar(n, main.Mini_ProgressBar);
-                    main.updateProgressBar((currentIndex * 100) + n, main.ProgressBar);
+                    main.update_progressbar(n, main.Mini_ProgressBar);
+                    main.update_progressbar((currentIndex * 100) + n, main.ProgressBar);
                 }
             }
             catch (Exception) { }

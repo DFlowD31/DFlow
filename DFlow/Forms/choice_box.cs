@@ -35,8 +35,9 @@ namespace LazyPortal
 
         private void choice_box_Load(object sender, EventArgs e)
         {
-            Program.Main_Form.enableMain(false);
+            Program.Main_Form.enable_main(false);
             ActiveControl = submitButton;
+            this.Focus();
         }
 
         private void seriesYes_Click(object sender, EventArgs e)
@@ -95,7 +96,7 @@ namespace LazyPortal
 
         private void choice_box_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Program.Main_Form.enableMain(true);
+            Program.Main_Form.enable_main(true);
         }
     }
 }

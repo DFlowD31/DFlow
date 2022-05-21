@@ -53,7 +53,7 @@ namespace LazyPortal
                 else
                     ((Button)sender).Tag = "red";
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
         }
 
         private void Save_Button_Click(object sender, EventArgs e)
@@ -75,7 +75,7 @@ namespace LazyPortal
                         ((Button)sender).Tag = "red";
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
         }
 
         public void Refresh_Seasons(long? anime_id)
@@ -102,7 +102,7 @@ namespace LazyPortal
                 selected_Anime_ID = anime_id;
                 Save_Button.Text = "Save";
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
             finally { setButtonColors(); loadingImage.BeginInvoke(new Action(() => { loadingImage.Visible = false; })); }
         }
 
@@ -112,7 +112,7 @@ namespace LazyPortal
             {
                 new season_episodes((long)selected_Anime_ID, Convert.ToInt64(((ListBox)sender).SelectedValue)) { Text = Animes.Find(x => x.id == Convert.ToInt64(Anime_List.SelectedValue)).english_name + " -> " + Seasons.Find(x => x.season_number == Convert.ToInt64(((ListBox)sender).SelectedValue)).season_english_name }.Show();
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
         }
 
         private void LoadBackground_DoWork(object sender, DoWorkEventArgs e)
@@ -142,7 +142,7 @@ namespace LazyPortal
                 else
                     Anime_List.DataSource = null;
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
             finally
             {
                 setButtonColors();
@@ -167,7 +167,7 @@ namespace LazyPortal
                 else
                     Add_Season.BackColor = Properties.Settings.Default.blue;
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
         }
 
         public void setAnime(long? select_ID)
@@ -178,7 +178,7 @@ namespace LazyPortal
                 JPN_Name.Text = Animes.Find(x => x.id == select_ID).japanese_name;
                 Refresh_Seasons(select_ID);
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
         }
 
         private void Anime_List_MouseDown(object sender, MouseEventArgs e)
@@ -198,7 +198,7 @@ namespace LazyPortal
                     setButtonColors();
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
         }
 
         private void Anime_record_FormClosed(object sender, FormClosedEventArgs e)
@@ -217,7 +217,7 @@ namespace LazyPortal
                     setButtonColors();
                 }
             }
-            catch (Exception ex) { Program.Main_Form.Log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
+            catch (Exception ex) { Program.Main_Form.log(ex.Message + " in '" + GetType().ToString() + "' at: " + new StackTrace(ex, true).GetFrame(new StackTrace(ex, true).FrameCount - 1).GetFileLineNumber(), msgType.error); }
         }
     }
 }

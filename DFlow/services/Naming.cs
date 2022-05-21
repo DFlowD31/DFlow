@@ -26,15 +26,15 @@ namespace LazyPortal.services
         }
         private static void renameMusic()
         {
-            FolderBrowserDialog Folder_Browser_Dialog = main.getFolderBrowserDialog();
+            FolderBrowserDialog Folder_Browser_Dialog = main.get_folderbrowserdialog();
             if (Folder_Browser_Dialog != null)
             {
                 int fileCount = Directory.GetFiles(Folder_Browser_Dialog.SelectedPath, "*.mp3").Count();
                 int currentCount = 0;
-                main.maxProgress(fileCount, main.ProgressBar);
-                main.updateProgressBar(0, main.ProgressBar);
+                main.max_progressbar(fileCount, main.ProgressBar);
+                main.update_progressbar(0, main.ProgressBar);
 
-                main.changeStatus("0/" + fileCount, msgType.message);
+                main.change_status("0/" + fileCount, msgType.message);
 
                 foreach (string file in Directory.GetFiles(Folder_Browser_Dialog.SelectedPath, "*.mp3"))
                 {
@@ -79,23 +79,23 @@ namespace LazyPortal.services
                             try
                             {
                                 File.Move(file, Folder_Browser_Dialog.SelectedPath + "/" + fileName + ".mp3");
-                                main.Log("Renamed --> " + fileName, msgType.message);
+                                main.log("Renamed --> " + fileName, msgType.message);
                             }
                             catch (Exception e)
                             {
                                 if (e.HResult == -2146232800)
-                                    main.Log("File Exists --> " + fileName, msgType.warning);
+                                    main.log("File Exists --> " + fileName, msgType.warning);
                                 else
-                                    main.Log("Couldn't Rename --> " + fileName + Environment.NewLine + e.ToString(), msgType.error);
+                                    main.log("Couldn't Rename --> " + fileName + Environment.NewLine + e.ToString(), msgType.error);
                             }
                         }
                         currentCount += 1;
-                        main.changeStatus(currentCount + "/" + fileCount, msgType.message);
-                        main.updateProgressBar(main.getProgressBarValue(main.ProgressBar) + 1, main.ProgressBar);
+                        main.change_status(currentCount + "/" + fileCount, msgType.message);
+                        main.update_progressbar(main.get_progressbar_value(main.ProgressBar) + 1, main.ProgressBar);
                     }
-                    catch (Exception ex) { main.Log(file + Environment.NewLine + "\t" + ex.ToString(), msgType.error); }
+                    catch (Exception ex) { main.log(file + Environment.NewLine + "\t" + ex.ToString(), msgType.error); }
                 }
-                main.changeStatus("Done", msgType.success);
+                main.change_status("Done", msgType.success);
             }
         }
 
@@ -112,7 +112,7 @@ namespace LazyPortal.services
         {
             try
             {
-                FolderBrowserDialog Folder_Browser_Dialog = main.getFolderBrowserDialog();
+                FolderBrowserDialog Folder_Browser_Dialog = main.get_folderbrowserdialog();
                 if (Folder_Browser_Dialog.ShowDialog() == DialogResult.OK)
                 {
                     int rename_episode_index = 1;
@@ -169,10 +169,10 @@ namespace LazyPortal.services
                         { fs.Close(); }
                         int fileCount = Directory.GetFiles(Folder_Browser_Dialog.SelectedPath, "*.*", SearchOption.AllDirectories).Count();
 
-                        main.maxProgress(fileCount * 100, main.ProgressBar);
-                        main.maxProgress(100, main.Mini_ProgressBar);
+                        main.max_progressbar(fileCount * 100, main.ProgressBar);
+                        main.max_progressbar(100, main.Mini_ProgressBar);
 
-                        main.changeStatus("0/" + fileCount, msgType.message);
+                        main.change_status("0/" + fileCount, msgType.message);
 
                         try
                         {
@@ -200,11 +200,11 @@ namespace LazyPortal.services
                                     thecount += k;
                                     while (k < thecount)
                                     {
-                                        main.Log(The_Files[k].ToString() + " --> " + Folder_Browser_Dialog.SelectedPath + @"\" + thedr + @"\" + The_Files[k].Substring(The_Files[k].LastIndexOf(@"\") + 1), msgType.message);
+                                        main.log(The_Files[k].ToString() + " --> " + Folder_Browser_Dialog.SelectedPath + @"\" + thedr + @"\" + The_Files[k].Substring(The_Files[k].LastIndexOf(@"\") + 1), msgType.message);
                                         File.Move(The_Files[k].ToString(), Folder_Browser_Dialog.SelectedPath + @"\" + thedr + @"\" + The_Files[k].Substring(The_Files[k].LastIndexOf(@"\") + 1));
                                         k += 1;
                                     }
-                                    main.Log(Environment.NewLine, msgType.message);
+                                    main.log(Environment.NewLine, msgType.message);
                                 }
                                 The_Folders = Directory.GetDirectories(Folder_Browser_Dialog.SelectedPath).ToList();
                                 The_Folders.Sort(new MyComparer());
@@ -272,12 +272,12 @@ namespace LazyPortal.services
                                         if (choice.chosenLanguage == language.english)
                                         {
                                             File.Move(FileName, "Episode " + Episode_Number_String + fileext);
-                                            main.Log("Renaming :  " + FileName + "   -->   " + "Episode " + Episode_Number_String + fileext, msgType.message);
+                                            main.log("Renaming :  " + FileName + "   -->   " + "Episode " + Episode_Number_String + fileext, msgType.message);
                                         }
                                         else if (choice.chosenLanguage == language.japanese)
                                         {
                                             File.Move(FileName, "第 " + Episode_Number_String + " 話" + fileext);
-                                            main.Log("Renaming :  " + FileName + "   -->   " + "第 " + Episode_Number_String + " 話" + fileext, msgType.message);
+                                            main.log("Renaming :  " + FileName + "   -->   " + "第 " + Episode_Number_String + " 話" + fileext, msgType.message);
                                         }
                                     }
                                     catch (Exception) { }
@@ -292,14 +292,14 @@ namespace LazyPortal.services
                                     Process bat = Process.Start(p);
                                     bat.WaitForExit();
                                     s += 1;
-                                    main.changeStatus(s + "/" + fileCount, msgType.message);
+                                    main.change_status(s + "/" + fileCount, msgType.message);
                                     rename_episode_index += 1;
                                     The_Episode_Index += 1;
                                 }
                             }
                             catch (Exception ex2)
                             {
-                                main.Log(ex2.ToString(), msgType.error);
+                                main.log(ex2.ToString(), msgType.error);
                             }
                             try
                             {
@@ -308,16 +308,16 @@ namespace LazyPortal.services
                             catch (Exception) { }
                         }
                         //File.Delete(Application.StartupPath & "\anime.bat")
-                        main.updateProgressBar(0, main.ProgressBar);
-                        main.updateProgressBar(0, main.Mini_ProgressBar);
-                        main.changeStatus("All Done", msgType.success);
+                        main.update_progressbar(0, main.ProgressBar);
+                        main.update_progressbar(0, main.Mini_ProgressBar);
+                        main.change_status("All Done", msgType.success);
                         rename_episode_index = 1;
                     }
                 }
             }
             catch (Exception ex)
             {
-                main.Log(ex.ToString(), msgType.error);
+                main.log(ex.ToString(), msgType.error);
             }
         }
 
@@ -332,12 +332,12 @@ namespace LazyPortal.services
 
         private static void renameSub()
         {
-            main.changeStatus("", msgType.message);
+            main.change_status("", msgType.message);
 
             bool is_series = false;
             bool have_seasons = false;
             bool get_from_text_file = false;
-            FolderBrowserDialog Folder_Browser_Dialog = main.getFolderBrowserDialog();
+            FolderBrowserDialog Folder_Browser_Dialog = main.get_folderbrowserdialog();
             if (Folder_Browser_Dialog.ShowDialog() == DialogResult.OK)
             {
                 DirectoryInfo d = new DirectoryInfo(Folder_Browser_Dialog.SelectedPath);
@@ -345,7 +345,7 @@ namespace LazyPortal.services
                 if (MessageBox.Show("Is it", "Series?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     is_series = true;
-                    main.maxProgress(d.GetFiles("*", SearchOption.AllDirectories).Count() / 2, main.ProgressBar);
+                    main.max_progressbar(d.GetFiles("*", SearchOption.AllDirectories).Count() / 2, main.ProgressBar);
                     if (MessageBox.Show("Does it", "Have Seasons?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         have_seasons = true;
 
@@ -353,7 +353,7 @@ namespace LazyPortal.services
                         get_from_text_file = true;
                 }
                 else
-                    main.maxProgress(d.GetFiles("*", SearchOption.AllDirectories).Count(), main.ProgressBar);
+                    main.max_progressbar(d.GetFiles("*", SearchOption.AllDirectories).Count(), main.ProgressBar);
  
                 if (have_seasons)
                     foreach (DirectoryInfo directory in d.GetDirectories())
@@ -362,7 +362,7 @@ namespace LazyPortal.services
                     Rename_Sub(d, is_series, get_from_text_file);
             }
 
-            main.changeStatus("Done", msgType.success);
+            main.change_status("Done", msgType.success);
         }
 
         private static void Rename_Sub(DirectoryInfo d, bool is_series, bool get_from_text_file)
@@ -381,17 +381,17 @@ namespace LazyPortal.services
                     try
                     {
                         File.Move(FileName.FullName, filenew + fileext);
-                        main.Log("Renamed --> " + filenew + fileext, msgType.message);
+                        main.log("Renamed --> " + filenew + fileext, msgType.message);
                     }
                     catch (Exception ex)
                     {
                         if (ex.HResult == -2146232800)
-                            main.Log("File Exists --> " + filenew + fileext, msgType.warning);
+                            main.log("File Exists --> " + filenew + fileext, msgType.warning);
                         else
-                            main.Log("Couldn't Rename --> " + filenew + fileext + Environment.NewLine + "\t" + ex.ToString(), msgType.error);
+                            main.log("Couldn't Rename --> " + filenew + fileext + Environment.NewLine + "\t" + ex.ToString(), msgType.error);
                     }
-                    main.incrementProgressBar(1, main.ProgressBar);
-                    main.changeStatus(main.ProgressBar.Value + "/" + main.ProgressBar.Maximum, msgType.message);
+                    main.increment_progressbar(1, main.ProgressBar);
+                    main.change_status(main.ProgressBar.Value + "/" + main.ProgressBar.Maximum, msgType.message);
                 }
             }
             if (is_series)
@@ -428,17 +428,17 @@ namespace LazyPortal.services
                             try
                             {
                                 File.Move(VidFiles.FullName, "Episode " + episode_index + " - " + Names_From_Text[index] + vid_ext);
-                                main.Log("Renamed --> " + "Episode " + episode_index + " - " + Names_From_Text[index] + vid_ext, msgType.message);
+                                main.log("Renamed --> " + "Episode " + episode_index + " - " + Names_From_Text[index] + vid_ext, msgType.message);
                                 movie_names.Add("Episode " + episode_index + " - " + Names_From_Text[index]);
                             }
                             catch (Exception ex)
                             {
                                 if (ex.HResult == -2146232800)
-                                    main.Log("File Exists --> " + "Episode " + episode_index + " - " + Names_From_Text[index] + vid_ext, msgType.warning);
+                                    main.log("File Exists --> " + "Episode " + episode_index + " - " + Names_From_Text[index] + vid_ext, msgType.warning);
                                 else
-                                    main.Log("Coulnd't Rename --> Episode " + episode_index + " - " + Names_From_Text[index] + vid_ext + Environment.NewLine + "\t" + ex.ToString(), msgType.error);
+                                    main.log("Coulnd't Rename --> Episode " + episode_index + " - " + Names_From_Text[index] + vid_ext + Environment.NewLine + "\t" + ex.ToString(), msgType.error);
                             }
-                            main.incrementProgressBar(1, main.ProgressBar);
+                            main.increment_progressbar(1, main.ProgressBar);
                             index1 += 1;
                             rename_episode_index += 1;
                             index += 1;
@@ -451,17 +451,17 @@ namespace LazyPortal.services
                     try
                     {
                         File.Move(SubFiles.FullName, movie_names[sub_index] + ".srt");
-                        main.Log("Renamed --> " + movie_names[sub_index] + ".srt", msgType.message);
+                        main.log("Renamed --> " + movie_names[sub_index] + ".srt", msgType.message);
                     }
                     catch (Exception ex)
                     {
                         if (ex.HResult == -2146232800)
-                            main.Log("File Exists --> " + movie_names[sub_index] + ".srt", msgType.warning);
+                            main.log("File Exists --> " + movie_names[sub_index] + ".srt", msgType.warning);
                         else
-                            main.Log("Coulnd't Rename --> " + movie_names[sub_index] + ".srt" + Environment.NewLine + "\t" + ex.ToString(), msgType.error);
+                            main.log("Coulnd't Rename --> " + movie_names[sub_index] + ".srt" + Environment.NewLine + "\t" + ex.ToString(), msgType.error);
                     }
-                    main.incrementProgressBar(1, main.ProgressBar);
-                    main.changeStatus(main.ProgressBar.Value + "/" + main.ProgressBar.Maximum, msgType.message);
+                    main.increment_progressbar(1, main.ProgressBar);
+                    main.change_status(main.ProgressBar.Value + "/" + main.ProgressBar.Maximum, msgType.message);
                     sub_index += 1;
                 }
             }
