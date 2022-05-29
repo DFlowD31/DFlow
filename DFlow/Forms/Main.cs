@@ -14,6 +14,8 @@ using TraktNet;
 using System.Net.Http;
 using TraktNet.Responses;
 using TraktNet.Objects.Get.Shows;
+using TraktNet.Requests.Parameters;
+using TraktNet.Objects.Authentication;
 
 namespace LazyPortal
 {
@@ -42,7 +44,7 @@ namespace LazyPortal
         {
             Task.Run(() =>
             {
-                if (new RestClient("https://api.themoviedb.org/3/authentication/token/new?api_key=9a49cbab6d640fd9483fbdd2abe22b94") { Proxy = SimpleWebProxy.Default }.Execute(new RestRequest(Method.GET)) != null)
+                if (new RestClient("https://api.themoviedb.org/3/authentication/token/new?api_key=9a49cbab6d640fd9483fbdd2abe22b94").ExecuteAsync(new RestRequest("", Method.Get)) != null)
                     log("TMDB connection successful...", msgType.success);
                 else
                     log("TMDB connection unsuccessful...", msgType.error);
@@ -259,27 +261,58 @@ namespace LazyPortal
             Show();
         }
 
-        private void new_function_test_btn_Click(object sender, EventArgs e)
+        private async void new_function_test_btn_Click(object sender, EventArgs e)
         {
             try
             {
-                // Both Client ID and Client Secret are required, if you need to authenticate your application
                 var client = new TraktClient("ffbabf875e565204c86c845286e60cee44385da8ff211f57812ced74e2d2e198", "20445df61023171ba5a55e357a8d0fc7b23a7b1c72e181c6ad0c7963b2b986d1");
 
-                if (client.IsValidForUseWithAuthorization)
-                    log("TraktTV connection successful", msgType.success);
-                else
-                    log("TraktTV connection unsuccessful", msgType.error);
+                if (!client.IsValidForAuthenticationProcess)
+                    throw new InvalidOperationException("Trakt Client not valid for authentication");
 
-                
+                client.Authorization = TraktAuthorization.CreateWith("883b619c865e36a089f6b68c5dc455ea80050b831f13510748b2ba17ea1e5fbf");
+
+                if (client.IsValidForUseWithAuthorization)
+                    log("Authorization successful", msgType.success);
+                else
+                    log("Authorization unsuccessful", msgType.error);
+
+                var nextEpisodes = await client.Shows.GetShowNextEpisodeAsync("the-flight-attendant");
+
+                var watchedShows = await client.Users.GetWatchedHistoryAsync("dflowd");
+
+                var episodeSearch = await client.Episodes.GetEpisodeAsync("the-flight-attendant", 1, 3);
+
+                //log(episodeSearch.Value..ToString(), msgType.message);
+               
             }
             catch (Exception ex) { MessageBox.Show(ex.ToString()); }
 
+            //var response = new RestClient("https://ww7.readmha.com/chapter/boku-no-hero-academia-chapter-353/").ExecuteAsync(new RestRequest("", Method.Get)).Result;
 
-            //if (new choice_box().ShowDialog() == DialogResult.OK)
+            //switch (response.Content.ToLower())
             //{
-            //    MessageBox.Show(choice.series.ToString());
+            //    case string a when a.Contains("1.jpeg"):
+            //        log("New chapter present", msgType.message);
+            //        break;
+            //    case string b when b.Contains("404"):
+            //        log("No new chapters.", msgType.message);
+            //        break;
+            //    default:
+            //        log("No new chapters.\n" + response.Content, msgType.message);
+            //        break;
             //}
+
+            //client.ExecuteAsync(request, response =>
+            //{
+            //    //log(response.Content, msgType.message);
+            //    switch (response.Content.ToLower())
+            //    {
+
+            //    }
+            //    //< img src = "https://cdn.dbsmanga.com/file/mangap/1069/10084000/1.jpeg" class="mb - 3 mx - auto js - page" loading="lazy" />
+
+            //});
         }
         private void movie_file_poster_btn_Click(object sender, EventArgs e)
         {
@@ -340,6 +373,9 @@ namespace LazyPortal
                                 switch (sub_directories.Name.ToLower())
                                 {
                                     case var folder_name when new Regex(@"(\s+season\s+)|(\s+s\d+)").IsMatch(folder_name):
+                                        set_poster_task = Task.Run(() => Poster.SetPoster(sub_directories.FullName, mediaTypes.tv));
+                                        break;
+                                    case var folder_name when new Regex(@"erai-raws").IsMatch(folder_name):
                                         set_poster_task = Task.Run(() => Poster.SetPoster(sub_directories.FullName, mediaTypes.tv));
                                         break;
                                     default:

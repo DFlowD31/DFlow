@@ -188,8 +188,8 @@ namespace LazyPortal.services
                             {
                                 foreach (int year in years)
                                 {
-                                    IRestResponse response = null;
-                                    response = new RestClient("https://api.themoviedb.org/3/search/" + type.ToString() + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&" + mediaType.getDateQuery((int)type) + "=" + year.ToString()).Execute(new RestRequest(Method.GET));
+                                    RestResponse response = null;
+                                    response = new RestClient("https://api.themoviedb.org/3/search/" + type.ToString() + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&" + mediaType.getDateQuery((int)type) + "=" + year.ToString()).ExecuteAsync(new RestRequest("", Method.Get)).Result;
 
                                     dynamic responseContent = mediaType.getResponce((int)type, response.Content);
 
@@ -245,7 +245,7 @@ namespace LazyPortal.services
                                                     if (s_number > 0)
                                                     {
                                                         //main.Log("https://api.themoviedb.org/3/tv/" + responseContent.Results[Convert.ToInt32(closest_index)].Id + "/season/" + s_number + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94", msgType.warning);
-                                                        IRestResponse seasonResponse = new RestClient("https://api.themoviedb.org/3/tv/" + responseContent.Results[Convert.ToInt32(closest_index)].Id + "/season/" + s_number + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94").Execute(new RestRequest(Method.GET));
+                                                        RestResponse seasonResponse = new RestClient("https://api.themoviedb.org/3/tv/" + responseContent.Results[Convert.ToInt32(closest_index)].Id + "/season/" + s_number + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94").ExecuteAsync(new RestRequest("", Method.Get)).Result;
                                                         try
                                                         {
                                                             dynamic seasonResponseContent = Newtonsoft.Json.Linq.JObject.Parse(seasonResponse.Content);
@@ -425,8 +425,8 @@ namespace LazyPortal.services
                         foreach (int year in years)
                         {
 
-                            IRestResponse response = null;
-                            response = new RestClient("https://api.themoviedb.org/3/search/movie?api_key=9a49cbab6d640fd9483fbdd2abe22b94&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&year=" + year.ToString()).Execute(new RestRequest(Method.GET));
+                            RestResponse response = null;
+                            response = new RestClient("https://api.themoviedb.org/3/search/movie?api_key=9a49cbab6d640fd9483fbdd2abe22b94&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&year=" + year.ToString()).ExecuteAsync(new RestRequest("", Method.Get)).Result;
 
                             TMDB_movie responseContent = JsonConvert.DeserializeObject<TMDB_movie>(response.Content);
 
