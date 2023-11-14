@@ -29,7 +29,7 @@ namespace LazyPortal.services
 
         public static dynamic getResponce(int type, string content)
         {
-            if (type == 0)
+            if (type == 4)
                 return JsonConvert.DeserializeObject<TMDB_collection>(content);
             else if (type == 1)
                 return JsonConvert.DeserializeObject<TMDB_movie>(content);

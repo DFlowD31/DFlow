@@ -1,4 +1,5 @@
 ﻿using LazyPortal.Classes;
+using Microsoft.VisualBasic.Logging;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -144,7 +145,7 @@ namespace LazyPortal.services
                                 years.Add(0);
 
                             string folderName = name;
-                            int s_number = 0;
+                            int s_number = -1;
 
                             name = name.Replace(".", " ");
 
@@ -152,13 +153,17 @@ namespace LazyPortal.services
                             {
                                 try
                                 {
-                                    if (name.Contains("第") && name.Contains("期"))
+                                    if (name.ToLower().Contains("specials"))
+                                        s_number = 0;
+                                    else if (name.Contains("第") && name.Contains("期"))
                                         s_number = Convert.ToInt32(Regex.Match(Regex.Match(name, @"(?:\s+第\s+\d+\s+期|\s+第\s+\d{2}\s+期)|\s+\d+|\s+\d{2}").ToString(), @"\d{2}|\d+").Groups[0].Value);
                                     else
                                         s_number = Convert.ToInt32(Regex.Match(Regex.Match(name, @"(?:\s+Season\s+\d+|\s+Season\s+\d{2})|(\s+S\d{2}E\d{2})|(\s+S\d{2})|(\s+S\d+)|(\s+S\d+E\d+)|(\d+)|(\d{2})").ToString(), @"\d{2}|\d+").Groups[0].Value);
                                 }
                                 catch (Exception ex) { main.log(ex.ToString(), msgType.error); }
                             }
+
+                            main.log(s_number.ToString(), msgType.message);
 
                             removeFromName<audio_codec>(ref name);
                             removeFromName<encoder>(ref name);
@@ -189,20 +194,26 @@ namespace LazyPortal.services
                                 foreach (int year in years)
                                 {
                                     RestResponse response = null;
-                                    response = new RestClient("https://api.themoviedb.org/3/search/" + type.ToString() + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&" + mediaType.getDateQuery((int)type) + "=" + year.ToString()).ExecuteAsync(new RestRequest("", Method.Get)).Result;
+                                    response = new RestClient("https://api.themoviedb.org/3/search/" + type.ToString() + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&query=" + System.Web.HttpUtility.UrlEncode(name) + "&" + mediaType.getDateQuery((int)type) + "=" + year.ToString()).ExecuteAsync(new RestRequest("", Method.Get)).Result;
 
                                     dynamic responseContent = mediaType.getResponce((int)type, response.Content);
 
+                                    
+
+                                    main.log("https://api.themoviedb.org/3/search/" + type.ToString() + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94&query=" + System.Web.HttpUtility.UrlEncode(name) + "&" + mediaType.getDateQuery((int)type) + "=" + year.ToString(), msgType.message);
+                                    main.log(responseContent.TotalResults.ToString(), msgType.message);
                                     if (responseContent.TotalResults > 0)
                                     {
+                                        
                                         string closest_index = string.Empty;
 
                                         if (responseContent.TotalResults == 1)
                                             closest_index = "0";
                                         else
                                         {
-
+                                            
                                             double? most_match = 0.0;
+                                            
                                             foreach (dynamic result in responseContent.Results)
                                             {
                                                 var title = string.Empty;
@@ -219,8 +230,10 @@ namespace LazyPortal.services
                                                     title = result.OriginalName;
                                                     try { year2 = result.FirstAirDate.Year.ToString(); } catch (Exception) { }
                                                 }
+                                                year2 = new Regex(@"\d{4}").Match(year2).ToString();
                                                 if (year == 0 || year.ToString() == year2)
                                                 {
+                                                    
                                                     title = title.Replace(".", " ");
                                                     title = Regex.Replace(title, @"[^0-9a-zA-Z\s&一-龯ぁ-んァ-ン\w！：／・]", string.Empty);
                                                     title = new Regex("[ ]{2,}", RegexOptions.None).Replace(title, " ");
@@ -235,6 +248,7 @@ namespace LazyPortal.services
                                                 }
                                             }
                                         }
+                                        main.log("match index := " + closest_index.ToString(), msgType.message);
                                         try
                                         {
                                             if (closest_index != string.Empty)
@@ -242,7 +256,7 @@ namespace LazyPortal.services
                                                 if (type == mediaTypes.tv)
                                                 {
                                                     // Set your Apikey
-                                                    if (s_number > 0)
+                                                    if (s_number >= 0)
                                                     {
                                                         //main.Log("https://api.themoviedb.org/3/tv/" + responseContent.Results[Convert.ToInt32(closest_index)].Id + "/season/" + s_number + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94", msgType.warning);
                                                         RestResponse seasonResponse = new RestClient("https://api.themoviedb.org/3/tv/" + responseContent.Results[Convert.ToInt32(closest_index)].Id + "/season/" + s_number + "?api_key=9a49cbab6d640fd9483fbdd2abe22b94").ExecuteAsync(new RestRequest("", Method.Get)).Result;
@@ -260,7 +274,7 @@ namespace LazyPortal.services
                                                     }
                                                     else
                                                         mainBitmap = new Bitmap(WebRequest.Create("https://image.tmdb.org/t/p/w500" + responseContent.Results[Convert.ToInt32(closest_index)].PosterPath).GetResponse().GetResponseStream());
-
+                                                    
                                                     main.log("Poster Found.", msgType.success);
                                                     goto posterFound;
                                                 }
@@ -426,7 +440,7 @@ namespace LazyPortal.services
                         {
 
                             RestResponse response = null;
-                            response = new RestClient("https://api.themoviedb.org/3/search/movie?api_key=9a49cbab6d640fd9483fbdd2abe22b94&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=true&year=" + year.ToString()).ExecuteAsync(new RestRequest("", Method.Get)).Result;
+                            response = new RestClient("https://api.themoviedb.org/3/search/movie?api_key=9a49cbab6d640fd9483fbdd2abe22b94&query=" + System.Web.HttpUtility.UrlEncode(name) + "&page=1&include_adult=false&year=" + year.ToString()).ExecuteAsync(new RestRequest("", Method.Get)).Result;
 
                             TMDB_movie responseContent = JsonConvert.DeserializeObject<TMDB_movie>(response.Content);
 
@@ -444,16 +458,15 @@ namespace LazyPortal.services
                                     foreach (TMDB_movie.Result result in responseContent.Results)
                                     {
                                         var title = result.OriginalTitle;
-                                        var year2 = result.ReleaseDate.ToString().Substring(0, 4);
+                                        var year2 = new Regex(@"\d{4}").Match(result.ReleaseDate.ToString());
 
-                                        if (year == 0 || year.ToString() == year2)
+                                        if (year == 0 || year.ToString() == year2.ToString())
                                         {
                                             //title = title.Replace(".", " ");
                                             //title = Regex.Replace(title, @"[^0-9a-zA-Z\s&一-龯ぁ-んァ-ン\w！：／・]", string.Empty);
                                             //title = new Regex("[ ]{2,}", RegexOptions.None).Replace(title, " ");
 
                                             double match_case = CalculateSimilarity(title.ToLower(), name.ToLower());
-                                            main.log(match_case.ToString(), msgType.message);
                                             //Log(title.ToLower() + " := " + name.ToLower() + " with " + match_case.ToString(), "Msg");
                                             if (match_case > most_match)
                                             {
@@ -479,12 +492,11 @@ namespace LazyPortal.services
                                 }
                                 catch (Exception) { }
                             }
-
-                            if (name.Contains(" "))
-                                name = name.Substring(0, name.LastIndexOf(" "));
-                            else
-                                name = string.Empty;
                         }
+                        if (name.Contains(" "))
+                            name = name.Substring(0, name.LastIndexOf(" "));
+                        else
+                            name = string.Empty;
                     }
 
                 posterFound:
@@ -523,9 +535,9 @@ namespace LazyPortal.services
                             main.update_progressbar(200, main.ProgressBar);
                         }
 
+                        //File.Move(Properties.Settings.Default.merge_destination + @"\" + Path.GetFileNameWithoutExtension(fileInfo.Name) + @".mkv", fileInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fileInfo.Name) + @".mkv");
                         File.Delete(fileInfo.DirectoryName + @"\cover.png");
-                        File.Delete(fileInfo.FullName);
-                        File.Move(Properties.Settings.Default.merge_destination + @"\" + Path.GetFileNameWithoutExtension(fileInfo.Name) + @".mkv", fileInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fileInfo.Name) + @".mkv");
+                        //File.Delete(fileInfo.FullName);
                         main.log("Done.", msgType.success);
                     }
                     else

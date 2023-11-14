@@ -14,8 +14,12 @@ using TraktNet;
 using System.Net.Http;
 using TraktNet.Responses;
 using TraktNet.Objects.Get.Shows;
-using TraktNet.Requests.Parameters;
 using TraktNet.Objects.Authentication;
+using LazyPortal;
+using System.Collections.Generic;
+using Microsoft.VisualBasic;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace LazyPortal
 {
@@ -36,8 +40,6 @@ namespace LazyPortal
             else
                 log("Connection unsuccessful...", msgType.error, true, true, false);
             check_TMDB();
-
-            
         }
 
         private void check_TMDB()
@@ -198,12 +200,19 @@ namespace LazyPortal
             }
         }
 
-        public OpenFileDialog get_openfiledialog()
+        public OpenFileDialog get_openfiledialog(string xfilter = "")
         {
             if (InvokeRequired)
-                return (OpenFileDialog)Invoke(new Func<OpenFileDialog>(() => get_openfiledialog()));
+            {
+                return (OpenFileDialog)Invoke(new Func<OpenFileDialog>(() => get_openfiledialog(xfilter)));
+            }
             else
             {
+                if (xfilter != "")
+                    Open_File_Dialog.Filter = xfilter;
+                else
+                    Open_File_Dialog.Filter = null;
+
                 if (Open_File_Dialog.ShowDialog() == DialogResult.OK)
                     return Open_File_Dialog;
                 else
@@ -246,8 +255,6 @@ namespace LazyPortal
         {
             if (!poster_background_worker.IsBusy)
                 poster_background_worker.RunWorkerAsync();
-                
-
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -261,62 +268,13 @@ namespace LazyPortal
             Show();
         }
 
-        private async void new_function_test_btn_Click(object sender, EventArgs e)
+        private void new_function_test_btn_Click(object sender, EventArgs e)
         {
-            try
-            {
-                var client = new TraktClient("ffbabf875e565204c86c845286e60cee44385da8ff211f57812ced74e2d2e198", "20445df61023171ba5a55e357a8d0fc7b23a7b1c72e181c6ad0c7963b2b986d1");
-
-                if (!client.IsValidForAuthenticationProcess)
-                    throw new InvalidOperationException("Trakt Client not valid for authentication");
-
-                client.Authorization = TraktAuthorization.CreateWith("883b619c865e36a089f6b68c5dc455ea80050b831f13510748b2ba17ea1e5fbf");
-
-                if (client.IsValidForUseWithAuthorization)
-                    log("Authorization successful", msgType.success);
-                else
-                    log("Authorization unsuccessful", msgType.error);
-
-                var nextEpisodes = await client.Shows.GetShowNextEpisodeAsync("the-flight-attendant");
-
-                var watchedShows = await client.Users.GetWatchedHistoryAsync("dflowd");
-
-                var episodeSearch = await client.Episodes.GetEpisodeAsync("the-flight-attendant", 1, 3);
-
-                //log(episodeSearch.Value..ToString(), msgType.message);
-               
-            }
-            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
-
-            //var response = new RestClient("https://ww7.readmha.com/chapter/boku-no-hero-academia-chapter-353/").ExecuteAsync(new RestRequest("", Method.Get)).Result;
-
-            //switch (response.Content.ToLower())
-            //{
-            //    case string a when a.Contains("1.jpeg"):
-            //        log("New chapter present", msgType.message);
-            //        break;
-            //    case string b when b.Contains("404"):
-            //        log("No new chapters.", msgType.message);
-            //        break;
-            //    default:
-            //        log("No new chapters.\n" + response.Content, msgType.message);
-            //        break;
-            //}
-
-            //client.ExecuteAsync(request, response =>
-            //{
-            //    //log(response.Content, msgType.message);
-            //    switch (response.Content.ToLower())
-            //    {
-
-            //    }
-            //    //< img src = "https://cdn.dbsmanga.com/file/mangap/1069/10084000/1.jpeg" class="mb - 3 mx - auto js - page" loading="lazy" />
-
-            //});
+            Task.Run(() => MKVToolNix.DefaultSubtitles());
         }
         private void movie_file_poster_btn_Click(object sender, EventArgs e)
         {
-            Poster.SetFileThumbnail();
+            Task.Run(() => Poster.SetFileThumbnail());
         }
 
         private void Merge_Button_Click(object sender, EventArgs e)
@@ -329,7 +287,7 @@ namespace LazyPortal
 
         private void movie_folder_poster_btn_Click(object sender, EventArgs e)
         {
-            Poster.SetPoster();
+            Task.Run(() => Poster.SetPoster());
         }
 
         private void anime_browse_btn_Click(object sender, EventArgs e)
@@ -401,7 +359,7 @@ namespace LazyPortal
                                 log(@"Thumbnailing """ + files.Name + @"""", msgType.message);
                                 set_thumbnail_task = Task.Run(() => Poster.SetFileThumbnail(files.FullName));
                                 set_thumbnail_task.Wait();
-                            }
+                            } 
                             break;
                         case ".mp4":
                             log(@"Need to muxe """ + files.Name + @"""", msgType.message);
@@ -415,6 +373,15 @@ namespace LazyPortal
             {
 
             }
+        }
+
+        private void manga_button_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                new manga_browser().Show();
+            }
+            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
         }
     }
 }

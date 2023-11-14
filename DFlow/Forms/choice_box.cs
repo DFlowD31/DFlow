@@ -24,13 +24,32 @@ namespace LazyPortal
 
         public choice_box(bool is_series, bool is_container, bool third, string thirdText = "")
         {
+            InitializeComponent();
+
             seriesPanel.Visible = is_series;
             containerPanel.Visible = is_container;
             choice3Panel.Visible = third;
             if (third)
                 choice3Label.Text = thirdText;
 
-            InitializeComponent();
+            if (!is_series)
+            {
+                containerPanel.Top -= 95;
+                choice3Panel.Top -= 95;
+                submitButton.Top -= 95;
+                cancelButton.Top -= 95;
+            }
+            if (!is_container)
+            {
+                choice3Panel.Top -= 95;
+                submitButton.Top -= 95;
+                cancelButton.Top -= 95;
+            }
+            if (!third)
+            {
+                submitButton.Top -= 95;
+                cancelButton.Top -= 95;
+            }
         }
 
         private void choice_box_Load(object sender, EventArgs e)

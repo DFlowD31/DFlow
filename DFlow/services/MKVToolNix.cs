@@ -8,6 +8,9 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using LanguageDetection;
 using System.Text.RegularExpressions;
+using LazyPortal.Classes;
+using Newtonsoft.Json;
+using System.Net.NetworkInformation;
 
 namespace LazyPortal.services
 {
@@ -17,6 +20,7 @@ namespace LazyPortal.services
         public static bool cancellationPending = false;
         public static int currentIndex = 0;
         public static bool mergeInProgress = false;
+        public static string MKVInfo = "";
         #region Merge Movies
 
         public static async void MergeMovies()
@@ -38,7 +42,7 @@ namespace LazyPortal.services
                     List<string> commands_report = new List<string>();
                     if (new choice_box().ShowDialog() == DialogResult.OK)
                     {
-                        main.change_button_text("Stop Merging", main.get_control_by_name("Merge_Button"), msgType.error);
+                        main.change_button_text("Stop Merging", main.get_control_by_name("merge_movie_btn"), msgType.error);
                         if (choice.series)
                         {
 
@@ -46,13 +50,13 @@ namespace LazyPortal.services
 
                             foreach (FileInfo fInfo in new DirectoryInfo(Folder_Browser_Dialog.SelectedPath).GetFiles("*.*", SearchOption.AllDirectories).Where(f => extension.videoEXT.Contains(f.Extension.ToLower())).ToArray())
                             {
-                                commands.Add(@"""" + Application.StartupPath + @"\MKVToolNix\/k mkvmerge.exe --ui-language en --output ^""" + Properties.Settings.Default.merge_destination + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + @".mkv^"" --language 0:und --language 1:und ^""^(^"" ^""" + fInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + "" + fInfo.Extension + @"^"" ^""^)^"" --language 0:en --track-name ^""0:English Subtitle ^"" --default-track 0:yes --forced-track 0:yes ^""^(^"" ^""" + fInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + @".srt ^"" ^""^)^"" --track-order 0:0,0:1,1:0");
+                                commands.Add(@"""" + Application.StartupPath + @"\MKVToolNix\/c mkvmerge.exe --ui-language en --output ^""" + Properties.Settings.Default.merge_destination + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + @".mkv^"" --language 0:und --language 1:und ^""^(^"" ^""" + fInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + "" + fInfo.Extension + @"^"" ^""^)^"" --language 0:en --track-name ^""0:English Subtitle ^"" --default-track 0:yes --forced-track 0:yes ^""^(^"" ^""" + fInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + @".srt ^"" ^""^)^"" --track-order 0:0,0:1,1:0");
                                 if (new DirectoryInfo(Folder_Browser_Dialog.SelectedPath).GetFiles(Path.GetFileNameWithoutExtension(fInfo.Name) + ".*", SearchOption.AllDirectories).Where(f => extension.subtitleEXT.Contains(f.Extension.ToLower())).ToArray().Count() > 0)
                                     commands_report.Add("Done.");
                                 else
                                     commands_report.Add("Subtitle File Not Found.");
                                 Merging_Movies.Add(Path.GetFileNameWithoutExtension(fInfo.Name));
-                                main.log(@"""" + Application.StartupPath + @"\MKVToolNix\/k mkvmerge.exe --ui-language en --output ^""" + Properties.Settings.Default.merge_destination + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + @".mkv^"" --language 0:und --language 1:und ^""^(^"" ^""" + fInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + "" + fInfo.Extension + @"^"" ^""^)^"" --language 0:en --track-name ^""0:English Subtitle ^"" --default-track 0:yes --forced-track 0:yes ^""^(^"" ^""" + fInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + @".srt ^"" ^""^)^"" --track-order 0:0,0:1,1:0", msgType.message);
+                                //main.log(@"""" + Application.StartupPath + @"\MKVToolNix\/c mkvmerge.exe --ui-language en --output ^""" + Properties.Settings.Default.merge_destination + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + @".mkv^"" --language 0:und --language 1:und ^""^(^"" ^""" + fInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + "" + fInfo.Extension + @"^"" ^""^)^"" --language 0:en --track-name ^""0:English Subtitle ^"" --default-track 0:yes --forced-track 0:yes ^""^(^"" ^""" + fInfo.DirectoryName + @"\" + Path.GetFileNameWithoutExtension(fInfo.Name) + @".srt ^"" ^""^)^"" --track-order 0:0,0:1,1:0", msgType.message);
                             }
                         }
                         else
@@ -75,7 +79,7 @@ namespace LazyPortal.services
                                 foreach (FileInfo srt in srtInfo)
                                 {
                                     string dLanguage = string.Empty;
-                                    
+
                                     using (StreamReader sReader = new StreamReader(srt.FullName))
                                     {
                                         LanguageDetector detector = new LanguageDetector();
@@ -161,8 +165,109 @@ namespace LazyPortal.services
                 else
                     main.change_status(statusText, msgType.success);
                 mergeInProgress = false;
-                main.change_button_text("Merge Movies", main.get_control_by_name("Merge_Button"), msgType.baseColor);
+                main.change_button_text("Merge Movies", main.get_control_by_name("merge_movie_btn"), msgType.baseColor);
             }
+        }
+
+        public static async void DefaultSubtitles()
+        {
+            await Task.Run(() => defaultSubtitles());
+        }
+
+        private static void defaultSubtitles()
+        {
+            try
+            {
+                List<FileInfo> files = new List<FileInfo>();
+                if (new choice_box(false, true, false).ShowDialog() == DialogResult.OK)
+                {
+                    if (choice.container)
+                    {
+                        using (FolderBrowserDialog Open_Folder_Dialog = main.get_folderbrowserdialog())
+                        {
+                            if (Open_Folder_Dialog == null)
+                                return;
+
+                            files = new DirectoryInfo(Open_Folder_Dialog.SelectedPath).GetFiles("*.mkv", SearchOption.TopDirectoryOnly).ToList();
+                        }
+                    }
+                    else
+                    {
+                        using (OpenFileDialog Open_File_Dialog = main.get_openfiledialog("Matroska Files|*.mkv"))
+                        {
+                            if (Open_File_Dialog == null)
+                                return;
+
+                            files.Add(new FileInfo(Open_File_Dialog.FileName));
+                        }
+                    }
+                }
+                else
+                    return;
+
+                main.max_progressbar(files.Count, main.ProgressBar);
+                main.max_progressbar(2, main.Mini_ProgressBar);
+                main.update_progressbar(0, main.ProgressBar);
+                main.change_status("Processing...", msgType.message);
+
+                foreach (FileInfo file in files)
+                {
+                    main.update_progressbar(0, main.Mini_ProgressBar);
+
+                    main.log("Processing file:= " + file.Name, msgType.message);
+
+                    int track_num = -1;
+                    string mkv_command = " --identification-format json --identify " + @"""" + file.FullName + @"""";
+                    main.log("Finding English Subtitle", msgType.message);
+
+                    Process p;
+                    try
+                    {
+                        MKVToolNix.MKVInfo = "";
+                        p = Process.Start(new ProcessStartInfo() { FileName = Application.StartupPath + @"\MKVToolNix\mkvmerge.exe", Arguments = mkv_command, RedirectStandardInput = true, RedirectStandardOutput = true, UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden });
+                        p.OutputDataReceived += new DataReceivedEventHandler(MKVToolNix.process_OutputDataReceived);
+                        p.BeginOutputReadLine();
+                        do
+                        {
+                        } while (!p.HasExited);
+                        p.WaitForExit();
+
+                        Root MKVInfo = JsonConvert.DeserializeObject<Root>(MKVToolNix.MKVInfo.Remove(MKVToolNix.MKVInfo.LastIndexOf(Environment.NewLine)));
+
+                        if (MKVInfo.tracks.FindAll(x => (x.properties.language == "eng") && (x.type == "subtitles")).Count > 0)
+                            track_num = MKVInfo.tracks.Find(x => (x.properties.language == "eng") && (x.type == "subtitles")).properties.number;
+                        else
+                            track_num = MKVInfo.tracks.Find(x => x.type == "subtitles").properties.number;
+
+                        main.increment_progressbar(1, main.Mini_ProgressBar);
+                        main.log("Done.", msgType.success);
+                    }
+                    catch (Exception ex) { MessageBox.Show(ex.ToString()); }
+
+                    if (track_num > -1)
+                    {
+                        mkv_command = @"""" + file.FullName + @""" --edit track:" + track_num + @" --set flag-default=1""";
+                        main.log("Changing the Sub", msgType.message);
+
+                        try
+                        {
+                            p = Process.Start(new ProcessStartInfo() { FileName = Application.StartupPath + @"\MKVToolNix\mkvpropedit.exe", Arguments = mkv_command, RedirectStandardInput = true, RedirectStandardOutput = true, UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden });
+                            p.OutputDataReceived += new DataReceivedEventHandler(MKVToolNix.process_OutputDataReceived);
+                            p.BeginOutputReadLine();
+                            do
+                            {
+                            } while (!p.HasExited);
+                            p.WaitForExit();
+                            main.log("Done.", msgType.success);
+                        }
+                        catch (Exception ex) { MessageBox.Show(ex.ToString()); };
+                        main.increment_progressbar(1, main.Mini_ProgressBar);
+                        main.increment_progressbar(1, main.ProgressBar);
+                    }
+                }
+                main.change_status("All Done.", msgType.success);
+            }
+            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
         }
 
         public static void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
@@ -174,6 +279,10 @@ namespace LazyPortal.services
                     int n = Convert.ToInt32(e.Data.Substring(e.Data.LastIndexOf("Progress") + 9).Replace("%", string.Empty));
                     main.update_progressbar(n, main.Mini_ProgressBar);
                     main.update_progressbar((currentIndex * 100) + n, main.ProgressBar);
+                }
+                else
+                {
+                    MKVInfo += e.Data + Environment.NewLine;
                 }
             }
             catch (Exception) { }

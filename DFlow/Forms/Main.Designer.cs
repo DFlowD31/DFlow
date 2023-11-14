@@ -55,6 +55,7 @@
             this.Open_File_Dialog = new System.Windows.Forms.OpenFileDialog();
             this.movie_file_poster_btn = new System.Windows.Forms.Button();
             this.poster_background_worker = new System.ComponentModel.BackgroundWorker();
+            this.manga_button = new System.Windows.Forms.Button();
             this.Log_Panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loadingImage)).BeginInit();
             this.SuspendLayout();
@@ -106,7 +107,7 @@
             this.movie_folder_poster_btn.ForeColor = System.Drawing.Color.White;
             this.movie_folder_poster_btn.Location = new System.Drawing.Point(23, 92);
             this.movie_folder_poster_btn.Name = "movie_folder_poster_btn";
-            this.movie_folder_poster_btn.Size = new System.Drawing.Size(127, 52);
+            this.movie_folder_poster_btn.Size = new System.Drawing.Size(82, 52);
             this.movie_folder_poster_btn.TabIndex = 51;
             this.movie_folder_poster_btn.Text = "Folder Poster";
             this.movie_folder_poster_btn.UseVisualStyleBackColor = false;
@@ -336,9 +337,9 @@
             this.movie_file_poster_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.movie_file_poster_btn.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.movie_file_poster_btn.ForeColor = System.Drawing.Color.White;
-            this.movie_file_poster_btn.Location = new System.Drawing.Point(156, 92);
+            this.movie_file_poster_btn.Location = new System.Drawing.Point(111, 92);
             this.movie_file_poster_btn.Name = "movie_file_poster_btn";
-            this.movie_file_poster_btn.Size = new System.Drawing.Size(127, 52);
+            this.movie_file_poster_btn.Size = new System.Drawing.Size(82, 52);
             this.movie_file_poster_btn.TabIndex = 53;
             this.movie_file_poster_btn.Text = "File Poster";
             this.movie_file_poster_btn.UseVisualStyleBackColor = false;
@@ -350,6 +351,21 @@
             this.poster_background_worker.WorkerSupportsCancellation = true;
             this.poster_background_worker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.main_timer_background_worker_DoWork);
             // 
+            // manga_button
+            // 
+            this.manga_button.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
+            this.manga_button.FlatAppearance.BorderSize = 0;
+            this.manga_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.manga_button.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.manga_button.ForeColor = System.Drawing.Color.White;
+            this.manga_button.Location = new System.Drawing.Point(199, 92);
+            this.manga_button.Name = "manga_button";
+            this.manga_button.Size = new System.Drawing.Size(84, 52);
+            this.manga_button.TabIndex = 54;
+            this.manga_button.Text = "Manga";
+            this.manga_button.UseVisualStyleBackColor = false;
+            this.manga_button.Click += new System.EventHandler(this.manga_button_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -357,6 +373,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1184, 567);
+            this.Controls.Add(this.manga_button);
             this.Controls.Add(this.movie_file_poster_btn);
             this.Controls.Add(this.anime_browse_btn);
             this.Controls.Add(this.new_function_test_btn);
@@ -413,6 +430,7 @@
         private System.Windows.Forms.OpenFileDialog Open_File_Dialog;
         private System.Windows.Forms.Button movie_file_poster_btn;
         private System.ComponentModel.BackgroundWorker poster_background_worker;
+        private System.Windows.Forms.Button manga_button;
     }
 }
 

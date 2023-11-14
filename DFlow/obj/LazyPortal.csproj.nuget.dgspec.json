@@ -42,6 +42,10 @@
               "target": "Package",
               "version": "[2.0.5, )"
             },
+            "HtmlAgilityPack": {
+              "target": "Package",
+              "version": "[1.11.46, )"
+            },
             "Json.Net": {
               "target": "Package",
               "version": "[1.0.33, )"
@@ -60,23 +64,23 @@
             },
             "Microsoft.AspNet.WebApi": {
               "target": "Package",
-              "version": "[5.2.8, )"
+              "version": "[5.2.9, )"
             },
             "Microsoft.AspNet.WebApi.Client": {
               "target": "Package",
-              "version": "[5.2.8, )"
+              "version": "[5.2.9, )"
             },
             "Microsoft.AspNet.WebApi.Core": {
               "target": "Package",
-              "version": "[5.2.8, )"
+              "version": "[5.2.9, )"
             },
             "Microsoft.AspNet.WebApi.WebHost": {
               "target": "Package",
-              "version": "[5.2.8, )"
+              "version": "[5.2.9, )"
             },
             "Microsoft.Bcl.AsyncInterfaces": {
               "target": "Package",
-              "version": "[6.0.0, )"
+              "version": "[7.0.0, )"
             },
             "Microsoft.CSharp": {
               "target": "Package",
@@ -84,11 +88,11 @@
             },
             "Microsoft.IO.RecyclableMemoryStream": {
               "target": "Package",
-              "version": "[2.2.0, )"
+              "version": "[2.3.2, )"
             },
             "Microsoft.NETCore.Platforms": {
               "target": "Package",
-              "version": "[6.0.3, )"
+              "version": "[7.0.2, )"
             },
             "Microsoft.Win32.Primitives": {
               "target": "Package",
@@ -104,11 +108,11 @@
             },
             "Newtonsoft.Json": {
               "target": "Package",
-              "version": "[13.0.1, )"
+              "version": "[13.0.3, )"
             },
             "RestSharp": {
               "target": "Package",
-              "version": "[107.3.0, )"
+              "version": "[110.2.0, )"
             },
             "Span.ReaderWriter": {
               "target": "Package",
@@ -116,7 +120,7 @@
             },
             "Stub.System.Data.SQLite.Core.NetFramework": {
               "target": "Package",
-              "version": "[1.0.115.5, )"
+              "version": "[1.0.117, )"
             },
             "System.AppContext": {
               "target": "Package",
@@ -148,19 +152,19 @@
             },
             "System.Data.SQLite": {
               "target": "Package",
-              "version": "[1.0.115.5, )"
+              "version": "[1.0.117, )"
             },
             "System.Data.SQLite.Core": {
               "target": "Package",
-              "version": "[1.0.115.5, )"
+              "version": "[1.0.117, )"
             },
             "System.Data.SQLite.EF6": {
               "target": "Package",
-              "version": "[1.0.115.5, )"
+              "version": "[1.0.117, )"
             },
             "System.Data.SQLite.Linq": {
               "target": "Package",
-              "version": "[1.0.115.5, )"
+              "version": "[1.0.117, )"
             },
             "System.Diagnostics.Debug": {
               "target": "Package",
@@ -168,7 +172,7 @@
             },
             "System.Diagnostics.DiagnosticSource": {
               "target": "Package",
-              "version": "[6.0.0, )"
+              "version": "[7.0.2, )"
             },
             "System.Diagnostics.Tools": {
               "target": "Package",
@@ -180,7 +184,7 @@
             },
             "System.Drawing.Common": {
               "target": "Package",
-              "version": "[6.0.0, )"
+              "version": "[7.0.0, )"
             },
             "System.Globalization": {
               "target": "Package",
@@ -212,7 +216,7 @@
             },
             "System.IO.Packaging": {
               "target": "Package",
-              "version": "[6.0.0, )"
+              "version": "[7.0.0, )"
             },
             "System.Linq": {
               "target": "Package",
@@ -224,7 +228,7 @@
             },
             "System.Memory": {
               "target": "Package",
-              "version": "[4.5.4, )"
+              "version": "[4.5.5, )"
             },
             "System.Net.Http": {
               "target": "Package",
@@ -316,11 +320,11 @@
             },
             "System.Text.Encodings.Web": {
               "target": "Package",
-              "version": "[6.0.0, )"
+              "version": "[7.0.0, )"
             },
             "System.Text.Json": {
               "target": "Package",
-              "version": "[6.0.4, )"
+              "version": "[7.0.2, )"
             },
             "System.Text.RegularExpressions": {
               "target": "Package",
@@ -364,7 +368,7 @@
             },
             "Trakt.NET": {
               "target": "Package",
-              "version": "[1.2.0, )"
+              "version": "[1.3.0, )"
             },
             "taglib": {
               "target": "Package",
@@ -375,6 +379,9 @@
       },
       "runtimes": {
         "win": {
+          "#import": []
+        },
+        "win-arm64": {
           "#import": []
         },
         "win-x64": {

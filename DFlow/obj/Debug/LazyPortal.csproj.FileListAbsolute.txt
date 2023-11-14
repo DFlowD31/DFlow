@@ -56,3 +56,8 @@ D:\Projects\DFlow\DFlow\bin\Debug\Trakt.NET.dll
 D:\Projects\DFlow\DFlow\obj\Debug\LazyPortal.csproj.CopyComplete
 D:\Projects\DFlow\DFlow\obj\Debug\LazyPortal.exe
 D:\Projects\DFlow\DFlow\obj\Debug\LazyPortal.pdb
+D:\Projects\DFlow\DFlow\bin\Debug\HtmlAgilityPack.dll
+D:\Projects\DFlow\DFlow\bin\Debug\HtmlAgilityPack.pdb
+D:\Projects\DFlow\DFlow\obj\Debug\LazyPortal.exe.config
+D:\Projects\DFlow\DFlow\obj\Debug\LazyPortal.web_browser.resources
+D:\Projects\DFlow\DFlow\obj\Debug\LazyPortal.manga_browser.resources

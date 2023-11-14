@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DFlow.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="LazyPortal.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="Subtitle_Extensions" Type="System.Collections.Specialized.StringCollection" Scope="User">
@@ -81,6 +81,9 @@
     </Setting>
     <Setting Name="blue" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">0, 174, 219</Value>
+    </Setting>
+    <Setting Name="manga_destination" Type="System.String" Scope="User">
+      <Value Profile="(Default)">D:\Manga</Value>
     </Setting>
   </Settings>
 </SettingsFile>

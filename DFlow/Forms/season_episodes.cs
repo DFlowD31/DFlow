@@ -650,5 +650,10 @@ namespace LazyPortal
             }
             catch (Exception) { batchDownload.BackColor = Properties.Settings.Default.red; }
         }
+
+        private void season_episodes_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

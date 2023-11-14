@@ -15,17 +15,6 @@ using LazyPortal.services;
 
 namespace LazyPortal
 {
-    //public static class DataRowExtensions
-    //{
-    //    public static T FieldOrDefault<T>(this DataRow row, string columnName)
-    //    {
-    //        return row.IsNull(columnName) ? default : row.Field<T>(columnName);
-    //    }
-    //    public static T FieldOrDefault<T>(this DataRow row, int columnIndex)
-    //    {
-    //        return row.IsNull(1) ? default : row.Field<T>(columnIndex);
-    //    }
-    //}
     public static class database
     {
         public readonly static SQLiteConnection sqlConnection = new SQLiteConnection("Data Source=" + Application.StartupPath + @"\database\data.sqlite; New=False;");
